@@ -1,14 +1,33 @@
-// src/Test.java
 public class Test {
-    // để đơn giản, cho phép truy cập trực tiếp
-    public String maSinhvien;
-    public String hoTen;
-    public String lopHoc;
+    private String maSinhVien;
+    private String hoTen;
+    private String lopHoc;
 
-    // constructor gán thẳng giá trị
-    public Test(String maSinhvien, String hoTen, String lopHoc) {
-        this.maSinhvien = maSinhvien;
+    // Constructor
+    public Test(String maSinhVien, String hoTen, String lopHoc) {
+        this.maSinhVien = maSinhVien;
         this.hoTen      = hoTen;
         this.lopHoc     = lopHoc;
+    }
+
+    public String getMaSinhVien() {
+        return maSinhVien;
+    }
+    public void setMaSinhVien(String maSinhVien) {
+        this.maSinhVien = maSinhVien;
+    }
+
+    public String getHoTen() {
+        return hoTen;
+    }
+    public void setHoTen(String hoTen) {
+        this.hoTen = hoTen;
+    }
+
+    public String getLopHoc() {
+        return lopHoc;
+    }
+    public void setLopHoc(String lopHoc) {
+        this.lopHoc = lopHoc;
     }
 }
