@@ -41,8 +41,9 @@ Yêu cầu:
 - Sinh viên có thể thêm các chức năng vào chương trình để ứng dụng phong phú hơn bằng cách thêm các nghiệp vụ nâng cao cho bài toán quản lý ký túc xá (tùy chọn).
 
 Nội dung 02:
+![z6620007013264_42ec8e3cd07be051214d0d5f5e29bc8b](https://github.com/user-attachments/assets/cdf2f69f-9bc9-4b3a-831d-cf48f73b864e)
 
-- Thiết kế và trình bày 1 sơ đồ Class Diagram của bài tập lớn, mô tả các lớp chính và mối quan hệ giữa chúng như: DormRoom, Student, RentalContract, v.v.
+
 
 Nội dung 03:
 
