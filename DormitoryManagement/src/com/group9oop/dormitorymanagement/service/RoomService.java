@@ -1,0 +1,44 @@
+package com.group9oop.dormitorymanagement.service;
+
+import com.group9oop.dormitorymanagement.model.Room;
+import com.group9oop.dormitorymanagement.model.Student;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+public class RoomService {
+    private List<Room> rooms = new ArrayList<>();
+
+    // Thêm phòng mới
+    public void addRoom(Room room) {
+        rooms.add(room);
+    }
+
+    // Xóa phòng theo số phòng
+    public boolean removeRoomByNumber(String roomNumber) {
+        return rooms.removeIf(r -> r.getRoomNumber().equals(roomNumber));
+    }
+
+    // Tìm phòng theo số phòng
+    public Optional<Room> findRoomByNumber(String roomNumber) {
+        return rooms.stream()
+                .filter(r -> r.getRoomNumber().equals(roomNumber))
+                .findFirst();
+    }
+
+    // Gán sinh viên vào phòng (nếu phòng chưa đầy)
+    public boolean assignStudentToRoom(Student student, String roomNumber) {
+        Optional<Room> roomOpt = findRoomByNumber(roomNumber);
+        if (roomOpt.isPresent()) {
+            Room room = roomOpt.get();
+            return room.addStudent(student);
+        }
+        return false;
+    }
+
+    // Lấy danh sách tất cả phòng
+    public List<Room> getAllRooms() {
+        return rooms;
+    }
+}
