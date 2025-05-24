@@ -42,3 +42,15 @@ public class StudentService {
         return false;
     }
 }
+
+// thêm method update
+public boolean updateStudent(int id, Student newData) {
+    Student s = studentsMap.get(id);
+    if (s == null) return false;
+    s.setFullname(newData.getFullname());
+    return true;
+}
+// thêm method delete
+public boolean deleteStudent(int id) {
+    return studentsMap.remove(id) != null;
+}
