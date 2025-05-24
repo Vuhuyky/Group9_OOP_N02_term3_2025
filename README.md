@@ -54,18 +54,18 @@ Nội dung 03:
     + Activity Diagram mô tả luồng xử lý nghiệp vụ chính (ví dụ: quy trình thuê phòng, trả phòng).
 
 
-## 5. Kiểm thử (Test)
+## Kiểm thử (Test)
 
 Phần này hướng dẫn cách verify CRUD cho 3 đối tượng: **Student**, **Room**, **Payment**, dùng cURL (hoặc Postman).
 
-### 5.1. Môi trường chạy
+### Môi trường chạy
 - Java 11+  
 - Maven: `mvn clean install`  
 - Khởi động server: `mvn spring-boot:run` (mặc định lắng nghe 8080)
 
 ---
 
-### 5.2. CRUD Student
+### CRUD Student
 
 | Method | URL                    | Body (JSON)                             | Mô tả                   |
 | ------ | ---------------------- | --------------------------------------- | ----------------------- |
