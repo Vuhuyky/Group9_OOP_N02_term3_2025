@@ -1,5 +1,6 @@
 package com.group9oop.dormitorymanagement.model;
 
+
 import java.util.ArrayList;
 import java.util.List;
 

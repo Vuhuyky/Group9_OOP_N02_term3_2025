@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/rooms")
@@ -22,9 +23,9 @@ public class RoomController {
 
     @GetMapping("/{roomNumber}")
     public ResponseEntity<Room> getRoomByNumber(@PathVariable String roomNumber) {
-        return roomService.getRoomByNumber(roomNumber)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Optional<Room> room = roomService.getRoomByNumber(roomNumber);
+        return room.map(ResponseEntity::ok)
+                   .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -34,11 +35,11 @@ public class RoomController {
 
     @PutMapping("/{roomNumber}")
     public ResponseEntity<Room> updateRoom(@PathVariable String roomNumber, @RequestBody Room room) {
-        return roomService.getRoomByNumber(roomNumber)
-                .map(existing -> {
-                    room.setRoomNumber(roomNumber);
-                    return ResponseEntity.ok(roomService.updateRoom(room));
-                }).orElse(ResponseEntity.notFound().build());
+        Optional<Room> existingRoom = roomService.getRoomByNumber(roomNumber);
+        return existingRoom.map(existing -> {
+            room.setRoomNumber(roomNumber); // Phải có setter
+            return ResponseEntity.ok(roomService.updateRoom(room));
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{roomNumber}")

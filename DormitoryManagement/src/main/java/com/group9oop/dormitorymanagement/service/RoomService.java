@@ -2,26 +2,30 @@ package com.group9oop.dormitorymanagement.service;
 
 import com.group9oop.dormitorymanagement.model.Room;
 import com.group9oop.dormitorymanagement.model.Student;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class RoomService {
+
     private List<Room> rooms = new ArrayList<>();
 
     // Thêm phòng mới
-    public void addRoom(Room room) {
+    public Room addRoom(Room room) {
         rooms.add(room);
+        return room;
     }
 
     // Xóa phòng theo số phòng
-    public boolean removeRoomByNumber(String roomNumber) {
-        return rooms.removeIf(r -> r.getRoomNumber().equals(roomNumber));
+    public void deleteRoom(String roomNumber) {
+        rooms.removeIf(r -> r.getRoomNumber().equals(roomNumber));
     }
 
     // Tìm phòng theo số phòng
-    public Optional<Room> findRoomByNumber(String roomNumber) {
+    public Optional<Room> getRoomByNumber(String roomNumber) {
         return rooms.stream()
                 .filter(r -> r.getRoomNumber().equals(roomNumber))
                 .findFirst();
@@ -29,7 +33,7 @@ public class RoomService {
 
     // Gán sinh viên vào phòng (nếu phòng chưa đầy)
     public boolean assignStudentToRoom(Student student, String roomNumber) {
-        Optional<Room> roomOpt = findRoomByNumber(roomNumber);
+        Optional<Room> roomOpt = getRoomByNumber(roomNumber);
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
             return room.addStudent(student);
