@@ -52,3 +52,43 @@ Nội dung 03:
     + Sequence Diagram mô tả trình tự tương tác khi thêm/sửa/xoá phòng, sinh viên, hoặc khi gán sinh viên vào phòng.
 
     + Activity Diagram mô tả luồng xử lý nghiệp vụ chính (ví dụ: quy trình thuê phòng, trả phòng).
+
+
+## 5. Kiểm thử (Test)
+
+Phần này hướng dẫn cách verify CRUD cho 3 đối tượng: **Student**, **Room**, **Payment**, dùng cURL (hoặc Postman).
+
+### 5.1. Môi trường chạy
+- Java 11+  
+- Maven: `mvn clean install`  
+- Khởi động server: `mvn spring-boot:run` (mặc định lắng nghe 8080)
+
+---
+
+### 5.2. CRUD Student
+
+| Method | URL                    | Body (JSON)                             | Mô tả                   |
+| ------ | ---------------------- | --------------------------------------- | ----------------------- |
+| POST   | `/students`            | `{ "id":"S001","fullName":"Nguyen A" }` | Tạo mới sinh viên       |
+| GET    | `/students`            | —                                       | Lấy danh sách tất cả    |
+| GET    | `/students/{id}`       | —                                       | Lấy sinh viên theo ID   |
+| PUT    | `/students/{id}`       | `{ "fullName":"Nguyen B" }`             | Cập nhật tên sinh viên  |
+| DELETE | `/students/{id}`       | —                                       | Xoá sinh viên theo ID   |
+
+**Ví dụ cURL**:
+```bash
+# Tạo
+curl -X POST localhost:8080/students \
+  -H "Content-Type: application/json" \
+  -d '{"id":"S001","fullName":"Nguyen A"}'
+
+# Lấy all
+curl localhost:8080/students
+
+# Cập nhật
+curl -X PUT localhost:8080/students/S001 \
+  -H "Content-Type: application/json" \
+  -d '{"fullName":"Nguyen B"}'
+
+# Xoá
+curl -X DELETE localhost:8080/students/S001
