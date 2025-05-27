@@ -10,27 +10,24 @@ https://vuhuyky.github.io/Group9_OOP_N02_term3_2025/
 
 Xây dựng ứng dụng quản lý ký túc xá
 
-Yêu cầu:
+**Yêu cầu:**
 
 - Giao diện Java Spring Boot 
 
-- Có chức năng quản lý các đối tượng chính trong ký túc xá như sau:
+1. **Có chức năng qquản lý phòng ký túc xá**
+   - Thêm, sửa, xoá phòng.
+   - Liệt kê thông tin phòng.
+   - Lọc phòng còn trống hoặc đã thuê.
 
-    + Thêm, sửa, xoá phòng ký túc xá.
+2. **Có chức năng qquản lý sinh viên**
+   - Thêm, sửa, xoá thông tin sinh viên.
+   - Liệt kê sinh viên.
+   - Lọc sinh viên theo lớp, khoa, trạng thái thuê phòng.
 
-    + Liệt kê thông tin các phòng, có thể lọc ra các phòng còn trống hoặc đã có người thuê.
-
-- Có chức năng quản lý sinh viên:
-
-    + Thêm, sửa, xoá thông tin sinh viên.
-
-    + Liệt kê sinh viên, có thể lọc theo các tiêu chí như lớp, khoa, hoặc trạng thái thuê phòng.
-
-- Có chức năng gán sinh viên vào phòng ký túc xá:
-
-    + Khi gán cần kiểm tra phòng còn chỗ trống.
-
-    + Quản lý trạng thái thuê phòng của sinh viên.
+3. **Có chức năng quản lý hợp đồng thuê phòng**
+   - Gán sinh viên vào phòng.
+   - Kiểm tra phòng còn chỗ trống.
+   - Quản lý trạng thái thuê phòng của sinh viên.
 
 - Dữ liệu được lưu trữ xuống file nhị phân
 
