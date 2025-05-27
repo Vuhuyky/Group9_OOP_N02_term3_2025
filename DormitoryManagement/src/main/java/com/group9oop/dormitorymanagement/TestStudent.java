@@ -1,16 +1,17 @@
-package com.group9;
+package com.group9oop.dormitorymanagement;
 
 import java.util.Scanner;
-import com.group9.model.Student;
-import com.group9.service.StudentList;
+import com.group9oop.dormitorymanagement.model.Student;
+import com.group9oop.dormitorymanagement.service.StudentList;
 
 public class TestStudent {
     public static void main(String[] args) {
         StudentList stuList = new StudentList();
+        
         // Khởi tạo mẫu
         stuList.addStudent(new Student("Nguyen Thi Lan Anh", 12345));
-        stuList.addStudent(new Student("Tran Van Minh",     2));
-        stuList.addStudent(new Student("Nguyen An",       101010));
+        stuList.addStudent(new Student("Tran Van Minh", 2));
+        stuList.addStudent(new Student("Nguyen An", 101010));
 
         Scanner sc = new Scanner(System.in);
 
