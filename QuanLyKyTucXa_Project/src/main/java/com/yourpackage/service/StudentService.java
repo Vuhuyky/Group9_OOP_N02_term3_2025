@@ -1,3 +1,4 @@
+import com.yourpackage.model.Student; // Thêm dòng này
 public class StudentService extends GenericService<Student, String> {
 
     @Override
