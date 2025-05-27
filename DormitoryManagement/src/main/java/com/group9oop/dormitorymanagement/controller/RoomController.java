@@ -23,9 +23,10 @@ public class RoomController {
 
     @GetMapping("/{roomNumber}")
     public ResponseEntity<Room> getRoomByNumber(@PathVariable String roomNumber) {
-        Optional<Room> room = roomService.getRoomByNumber(roomNumber);
-        return room.map(ResponseEntity::ok)
-                   .orElse(ResponseEntity.notFound().build());
+        Optional<Room> opt = roomService.getRoomByNumber(roomNumber);
+        return opt
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -34,12 +35,16 @@ public class RoomController {
     }
 
     @PutMapping("/{roomNumber}")
-    public ResponseEntity<Room> updateRoom(@PathVariable String roomNumber, @RequestBody Room room) {
-        Optional<Room> existingRoom = roomService.getRoomByNumber(roomNumber);
-        return existingRoom.map(existing -> {
-            room.setRoomNumber(roomNumber); // Phải có setter
-            return ResponseEntity.ok(roomService.updateRoom(room));
-        }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Room> updateRoom(@PathVariable String roomNumber,
+                                           @RequestBody Room room) {
+        Optional<Room> opt = roomService.getRoomByNumber(roomNumber);
+        if (opt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        // gán lại key
+        room.setRoomNumber(roomNumber);
+        Room updated = roomService.updateRoom(room);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{roomNumber}")
