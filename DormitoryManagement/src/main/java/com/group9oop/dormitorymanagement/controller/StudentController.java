@@ -36,14 +36,15 @@ public class StudentController {
     public ResponseEntity<Student> updateStudent(@PathVariable String id, @RequestBody Student student) {
         return studentService.getStudentById(id)
                 .map(existing -> {
-                    student.setId(id);
+                    student.setId(Integer.parseInt(id));
                     return ResponseEntity.ok(studentService.updateStudent(student));
                 }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable String id) {
-        studentService.deleteStudent(id);
-        return ResponseEntity.noContent().build();
+    studentService.deleteStudent(Integer.parseInt(id));
+    return ResponseEntity.noContent().build();
     }
+
 }

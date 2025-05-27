@@ -34,6 +34,9 @@ public class Room {
     public String getRoomNumber() {
         return roomNumber;
     }
+    public void setRoomNumber(String roomNumber) {
+    this.roomNumber = roomNumber;
+    }
 
     public int getCapacity() {
         return capacity;

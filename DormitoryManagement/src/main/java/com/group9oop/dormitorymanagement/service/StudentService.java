@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service  // THÊM DÒNG NÀY
+@Service
 public class StudentService {
+
     private List<Student> students = new ArrayList<>();
 
     public List<Student> getAllStudents() {
@@ -16,7 +17,9 @@ public class StudentService {
     }
 
     public Optional<Student> getStudentById(String id) {
-        return students.stream().filter(s -> s.getId().equals(id)).findFirst();
+        return students.stream()
+                .filter(s -> String.valueOf(s.getId()).equals(id))
+                .findFirst();
     }
 
     public Student addStudent(Student student) {
@@ -30,7 +33,7 @@ public class StudentService {
         return student;
     }
 
-    public void deleteStudent(String id) {
-        students.removeIf(s -> s.getId().equals(id));
+    public void deleteStudent(int id) {
+        students.removeIf(s -> s.getId() == id);
     }
 }
