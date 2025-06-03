@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 
+      1. Định nghĩa dự án Maven (groupId, artifactId, version, packaging)
+      2. Kế thừa từ spring-boot-starter-parent để dễ cấu hình Spring Boot
+    -->
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>dorm-management</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>Dormitory Management Application</name>
+    <description>Ứng dụng Quản lý Ký túc xá – sử dụng Spring Boot + MySQL (JPA/Hibernate)</description>
+
+    <!-- 
+      Kế thừa Spring Boot Parent POM để được thừa hưởng cấu hình mặc định (plugin, dependency management)
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <!-- Thiết lập Java version (bạn có thể thay thành 17 nếu đang dùng Java 17) -->
+    <properties>
+        <java.version>11</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- 1) Spring Boot Starter Web: bao gồm Spring MVC, Tomcat embedded, Jackson JSON -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- 2) Spring Data JPA: Hibernate + JPA API để làm việc với database -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- 3) MySQL Connector/J: driver JDBC kết nối tới MySQL -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- 4) Lombok (tuỳ chọn): giúp giảm boilerplate code (getter/setter, constructor) -->
+        <!-- Nếu bạn không dùng Lombok, có thể xóa hẳn dependency này -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- 5) Spring Boot Starter Test: bao gồm JUnit, Mockito, Hamcrest, v.v. để viết unit/integration test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Plugin giúp đóng gói (packaging) Spring Boot thành jar chạy được -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.5</version>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
