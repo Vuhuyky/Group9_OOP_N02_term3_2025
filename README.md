@@ -57,7 +57,7 @@ Nội dung 03:
 
 **Phân chia:**
 *Đỗ Minh Nhật* 
-Chức năng: Kiểm tra xem phòng có tồn tại hay không.
+**Chức năng:** Kiểm tra xem phòng có tồn tại hay không.
 
 Miêu tả công việc:
 
@@ -68,7 +68,7 @@ Miêu tả công việc:
 - Trả về thông báo nếu phòng không tồn tại.
 
 *Vũ Huy Kỳ*
-Chức năng: Kiểm tra phòng có đầy hay không và đăng ký sinh viên vào phòng.
+**Chức năng:** Kiểm tra phòng có đầy hay không và đăng ký sinh viên vào phòng.
 
 Miêu tả công việc:
 
