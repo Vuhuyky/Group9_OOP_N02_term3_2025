@@ -53,8 +53,10 @@ Nội dung 03:
 
 ## Lưu đồ thuật toán
 ![luudo](https://github.com/user-attachments/assets/9b82c599-9981-474d-9746-b251ae7a84ca)
-Phân chia:
-Đỗ Minh Nhật 
+
+
+**Phân chia:**
+*Đỗ Minh Nhật* 
 Chức năng: Kiểm tra xem phòng có tồn tại hay không.
 
 Miêu tả công việc:
@@ -65,7 +67,7 @@ Miêu tả công việc:
 
 - Trả về thông báo nếu phòng không tồn tại.
 
-Vũ Huy Kỳ
+*Vũ Huy Kỳ*
 Chức năng: Kiểm tra phòng có đầy hay không và đăng ký sinh viên vào phòng.
 
 Miêu tả công việc:
