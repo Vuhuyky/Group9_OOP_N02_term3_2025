@@ -66,6 +66,7 @@ Miêu tả công việc:
 - Phương thức này nhận ID phòng và tìm kiếm phòng trong cơ sở dữ liệu.
 
 - Trả về thông báo nếu phòng không tồn tại.
+- 
 public boolean isRoomExist(String roomId) {
     return roomRepository.existsById(roomId); // Kiểm tra sự tồn tại của phòng
 }
