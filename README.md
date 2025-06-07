@@ -51,41 +51,27 @@ Nội dung 03:
     + Activity Diagram mô tả luồng xử lý nghiệp vụ chính (ví dụ: quy trình thuê phòng, trả phòng).
 
 
-## Kiểm thử (Test)
+## Lưu đồ thuật toán
+![luudo](https://github.com/user-attachments/assets/9b82c599-9981-474d-9746-b251ae7a84ca)
+Phân chia:
+Đỗ Minh Nhật 
+Chức năng: Kiểm tra xem phòng có tồn tại hay không.
 
-Phần này hướng dẫn cách verify CRUD cho 3 đối tượng: **Student**, **Room**, **Payment**, dùng cURL (hoặc Postman).
+Miêu tả công việc:
 
-### Môi trường chạy
-- Java 11+  
-- Maven: `mvn clean install`  
-- Khởi động server: `mvn spring-boot:run`
+- Viết phương thức để kiểm tra sự tồn tại của phòng trong cơ sở dữ liệu.
 
----
+- Phương thức này nhận ID phòng và tìm kiếm phòng trong cơ sở dữ liệu.
 
-### CRUD Student
+- Trả về thông báo nếu phòng không tồn tại.
 
-| Method | URL                    | Body (JSON)                             | Mô tả                   |
-| ------ | ---------------------- | --------------------------------------- | ----------------------- |
-| POST   | `/students`            | `{ "id":"S001","fullName":"Nguyen A" }` | Tạo mới sinh viên       |
-| GET    | `/students`            | —                                       | Lấy danh sách tất cả    |
-| GET    | `/students/{id}`       | —                                       | Lấy sinh viên theo ID   |
-| PUT    | `/students/{id}`       | `{ "fullName":"Nguyen B" }`             | Cập nhật tên sinh viên  |
-| DELETE | `/students/{id}`       | —                                       | Xoá sinh viên theo ID   |
+Vũ Huy Kỳ
+Chức năng: Kiểm tra phòng có đầy hay không và đăng ký sinh viên vào phòng.
 
-**Ví dụ cURL**:
-```bash
-# Tạo
-curl -X POST localhost:8080/students \
-  -H "Content-Type: application/json" \
-  -d '{"id":"S001","fullName":"Nguyen A"}'
+Miêu tả công việc:
 
-# Lấy all
-curl localhost:8080/students
+- Viết phương thức để kiểm tra phòng có đầy hay không (dựa vào số lượng sinh viên đã đăng ký trong phòng).
 
-# Cập nhật
-curl -X PUT localhost:8080/students/S001 \
-  -H "Content-Type: application/json" \
-  -d '{"fullName":"Nguyen B"}'
+- Nếu phòng chưa đầy, tiếp tục đăng ký sinh viên vào phòng.
 
-# Xoá
-curl -X DELETE localhost:8080/students/S001
+- Cập nhật thông tin sinh viên, ghi nhận ngày check-in và gán phòng cho sinh viên.
