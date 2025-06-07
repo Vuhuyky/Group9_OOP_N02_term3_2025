@@ -38,3 +38,4 @@ public class RoomServiceTest {
         assertEquals("A101", all.get(0).getRoomNumber());
     }
 }
+

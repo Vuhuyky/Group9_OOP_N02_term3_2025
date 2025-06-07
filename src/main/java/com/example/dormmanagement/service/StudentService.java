@@ -16,8 +16,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final RoomRepository roomRepository;
 
-    public StudentService(StudentRepository studentRepository,
-                          RoomRepository roomRepository) {
+    public StudentService(StudentRepository studentRepository, RoomRepository roomRepository) {
         this.studentRepository = studentRepository;
         this.roomRepository = roomRepository;
     }
@@ -59,7 +58,7 @@ public class StudentService {
         return false;
     }
 
-    // **Sửa method gán sinh viên vào phòng chỉ nhận 2 tham số**
+    // Phương thức gán sinh viên vào phòng (chỉ nhận 2 tham số)
     public boolean assignStudentToRoom(String studentId, String roomId) {
         Optional<Room> optRoom = roomRepository.findById(roomId);
         if (optRoom.isEmpty()) {
@@ -102,7 +101,8 @@ public class StudentService {
 
     public boolean checkoutStudent(String studentId) {
         Optional<Student> opt = studentRepository.findById(studentId);
-        if (opt.isEmpty()) return false;
+        if (opt.isEmpty())
+            return false;
 
         Student student = opt.get();
         student.setCheckedIn(false);
@@ -112,4 +112,5 @@ public class StudentService {
         studentRepository.save(student);
         return true;
     }
+    
 }

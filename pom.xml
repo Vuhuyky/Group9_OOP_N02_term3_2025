@@ -3,10 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <!-- 
-      1. Định nghĩa dự án Maven (groupId, artifactId, version, packaging)
-      2. Kế thừa từ spring-boot-starter-parent để dễ cấu hình Spring Boot
-    -->
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.example</groupId>
     <artifactId>dorm-management</artifactId>
@@ -15,9 +11,7 @@
     <name>Dormitory Management Application</name>
     <description>Ứng dụng Quản lý Ký túc xá – sử dụng Spring Boot + MySQL (JPA/Hibernate)</description>
 
-    <!-- 
-      Kế thừa Spring Boot Parent POM để được thừa hưởng cấu hình mặc định (plugin, dependency management)
-    -->
+    <!-- Kế thừa Spring Boot Parent POM để được thừa hưởng cấu hình mặc định -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -25,7 +19,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <!-- Thiết lập Java version (bạn có thể thay thành 17 nếu đang dùng Java 17) -->
+    <!-- Thiết lập Java version -->
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -50,8 +44,14 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- 4) Lombok (tuỳ chọn): giúp giảm boilerplate code (getter/setter, constructor) -->
-        <!-- Nếu bạn không dùng Lombok, có thể xóa hẳn dependency này -->
+        <!-- 4) H2 Database: dùng trong quá trình kiểm thử, sẽ sử dụng MySQL khi deploy -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- 5) Lombok (tuỳ chọn): giúp giảm boilerplate code -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -59,17 +59,38 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 5) Spring Boot Starter Test: bao gồm JUnit, Mockito, Hamcrest, v.v. để viết unit/integration test -->
+        <!-- 6) Spring Boot Starter Test: bao gồm JUnit, Mockito, Hamcrest, v.v. để viết unit/integration test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
+        <!-- 7) JUnit Jupiter for JUnit 5 -->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.7.1</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.7.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- 8) Spring Boot Starter Thymeleaf for server-side rendering -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- 9) Spring Boot Starter Security for application security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         
     </dependencies>
@@ -87,5 +108,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

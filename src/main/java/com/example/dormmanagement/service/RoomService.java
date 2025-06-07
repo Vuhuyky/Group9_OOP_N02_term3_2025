@@ -55,4 +55,9 @@ public class RoomService {
     public List<Room> filterByCapacity(int capacity) {
         return roomRepository.findByCapacity(capacity);
     }
+
+    // Phương thức kiểm tra phòng có tồn tại hay không
+    public boolean isRoomExist(String roomId) {
+        return roomRepository.existsById(roomId);
+    }
 }
