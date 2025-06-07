@@ -66,6 +66,11 @@ Miêu tả công việc:
 - Phương thức này nhận ID phòng và tìm kiếm phòng trong cơ sở dữ liệu.
 
 - Trả về thông báo nếu phòng không tồn tại.
+public boolean isRoomExist(String roomId) {
+    return roomRepository.existsById(roomId); // Kiểm tra sự tồn tại của phòng
+}
+
+
 
 *Vũ Huy Kỳ*
 **Chức năng:** Kiểm tra phòng có đầy hay không và đăng ký sinh viên vào phòng.
@@ -77,3 +82,27 @@ Miêu tả công việc:
 - Nếu phòng chưa đầy, tiếp tục đăng ký sinh viên vào phòng.
 
 - Cập nhật thông tin sinh viên, ghi nhận ngày check-in và gán phòng cho sinh viên.
+- 
+public boolean assignStudentToRoom(String studentId, String roomId) {
+    // Kiểm tra phòng có tồn tại
+    if (!roomService.isRoomExist(roomId)) {
+        return false; // Nếu phòng không tồn tại
+    }
+
+    Room room = roomService.findById(roomId).orElseThrow();
+    // Kiểm tra phòng đã đầy chưa
+    int currentOccupancy = studentRepository.countByRoomId(roomId);
+    if (currentOccupancy >= room.getCapacity()) {
+        return false; // Phòng đã đầy
+    }
+
+    // Đăng ký sinh viên vào phòng
+    Student student = studentService.findById(studentId).orElseThrow();
+    student.setRoomId(roomId);
+    student.setCheckedIn(true);
+    student.setCheckInDate(LocalDate.now());
+    student.setCheckOutDate(null); // reset ngày check-out nếu có
+
+    studentRepository.save(student);
+    return true; // Đăng ký thành công
+}
