@@ -16,7 +16,7 @@ public class PrintList {
         System.out.printf("%-12s %-20s %-10s %-15s%n", "Room ID", "Room Address", "Price", "Status");
         System.out.println("----------------------------------------------------");
         for (DormRoom room : dormRoomManager.getItems()) {
-            System.out.printf("%-12s %-20s %-10s %-15s%n", room.getRoomID(), room.getRoomAddress(), room.getPrice(), room.getRoomStatus());
+            System.out.printf("%-12s %-20s %-10s %-15s%n", room.getDormRoomID(), room.getBuilding(), room.getPrice(), room.getRoomStatus());
         }
     }
 
@@ -29,7 +29,7 @@ public class PrintList {
         System.out.printf("%-15s %-20s %-15s %-20s%n", "Student ID", "Name", "Phone", "Dorm Room ID");
         System.out.println("--------------------------------------------------------------");
         for (Student student : studentManager.getItems()) {
-            System.out.printf("%-15s %-20s %-15s %-20s%n", student.getStudentID(), student.getName(), student.getPhone(), student.getDormRoomID());
+            System.out.printf("%-15s %-20s %-15s %-20s%n", student.getStudentID(), student.getName(), student.getPhoneNumber(), student.getDormRoomID());
         }
     }
 
@@ -42,7 +42,7 @@ public class PrintList {
         System.out.printf("%-15s %-15s %-15s %-20s %-20s%n", "Contract ID", "Student ID", "Room ID", "Start Date", "End Date");
         System.out.println("-------------------------------------------------------------");
         for (RentalContract contract : rentalContractManager.getItems()) {
-            System.out.printf("%-15s %-15s %-15s %-20s %-20s%n", contract.getContractID(), contract.getStudentID(), contract.getRoomID(), contract.getStartDate(), contract.getEndDate());
+            System.out.printf("%-15s %-15s %-15s %-20s %-20s%n", contract.getContractID(), contract.getStudentID(), contract.getDormRoomID(), contract.getStartDate(), contract.getEndDate());
         }
     }
 }

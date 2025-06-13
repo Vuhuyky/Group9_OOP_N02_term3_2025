@@ -27,6 +27,10 @@ public class Student implements Identifiable {
         this.dormRoomID = dormRoomID;
     }
 
+    public String getName() {
+        return name;  // Đảm bảo có phương thức getName()
+    }
+
     @Override
     public String toString() {
         return "Student ID: " + studentID + ", Name: " + name + ", Phone: " + phoneNumber + ", Dorm Room: " + dormRoomID;

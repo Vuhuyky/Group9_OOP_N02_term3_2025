@@ -51,4 +51,9 @@ public class DormRoom implements Identifiable {
     public String toString() {
         return "Room ID: " + dormRoomID + ", Price: " + price + ", Building: " + building + ", Status: " + roomStatus;
     }
+
+    // Thêm phương thức getDormRoomID để tương thích với lớp RentalContract
+    public String getDormRoomID() {
+        return dormRoomID;
+    }
 }
