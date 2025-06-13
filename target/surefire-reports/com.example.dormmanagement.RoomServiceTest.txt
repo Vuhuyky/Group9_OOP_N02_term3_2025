@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.example.dormmanagement.RoomServiceTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.001 s <<< FAILURE! - in com.example.dormmanagement.RoomServiceTest
-testIsRoomExist  Time elapsed: 0 s  <<< ERROR!
-java.lang.NullPointerException: Cannot invoke "com.example.dormmanagement.repository.RoomRepository.save(Object)" because "this.roomRepository" is null
-	at com.example.dormmanagement.RoomServiceTest.testIsRoomExist(RoomServiceTest.java:21)
-
