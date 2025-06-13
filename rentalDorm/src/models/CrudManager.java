@@ -7,7 +7,7 @@ public class CrudManager<T extends Identifiable> {
     private List<T> items = new ArrayList<>(); // Danh sách các đối tượng được quản lý
 
     // Create: thêm đối tượng mới vào danh sách
-    public void create(T item) {
+    public void add(T item) {
         items.add(item);
         System.out.println("Đã thêm: " + item.getID());
     }
@@ -50,5 +50,15 @@ public class CrudManager<T extends Identifiable> {
     // Getter: lấy danh sách các đối tượng
     public List<T> getItems() {
         return items;
+    }
+
+    // Getter: lấy đối tượng theo ID
+    public T getItemById(String id) {
+        for (T item : items) {
+            if (item.getID().equals(id)) {
+                return item;
+            }
+        }
+        return null;  // Nếu không tìm thấy
     }
 }

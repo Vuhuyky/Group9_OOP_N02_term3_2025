@@ -17,7 +17,7 @@ public class Search {
         boolean found = false;
         for (DormRoom room : dormRoomManager.getItems()) {
             if (room.getRoomStatus().equalsIgnoreCase(status)) {
-                System.out.println("Phòng " + room.getRoomID() + " có trạng thái " + room.getRoomStatus());
+                System.out.println("Phòng " + room.getDormRoomID() + " có trạng thái " + room.getRoomStatus());
                 found = true;
             }
         }

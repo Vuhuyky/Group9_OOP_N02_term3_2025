@@ -23,12 +23,25 @@ public class RentalContract implements Identifiable {
         return contractID;
     }
 
+    // Getter cho student, dormRoom, startDate, endDate
     public Student getStudent() {
         return student;
     }
 
     public DormRoom getDormRoom() {
         return dormRoom;
+    }
+
+    public String getContractID() {
+        return contractID;
+    }
+
+    public String getStudentID() {
+        return student.getStudentID();
+    }
+
+    public String getDormRoomID() {
+        return dormRoom.getDormRoomID();
     }
 
     public LocalDate getStartDate() {

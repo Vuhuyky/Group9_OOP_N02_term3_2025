@@ -6,6 +6,7 @@ import models.CrudManager;
 import CRUD.PrintList;
 import CRUD.Search;
 import CRUD.Output;
+import java.time.LocalDate;
 
 public class App {
     public static void main(String[] args) {
@@ -35,7 +36,7 @@ public class App {
                     manageStudents(studentManager, scanner);
                     break;
                 case 3:
-                    manageRentalContracts(rentalContractManager, scanner);
+                    manageRentalContracts(rentalContractManager, studentManager, dormRoomManager, scanner);
                     break;
                 case 4:
                     System.out.println("Thoát chương trình.");
@@ -47,5 +48,147 @@ public class App {
         }
     }
 
-    // Các phương thức quản lý khác (dormRooms, students, rentalContracts)
+    // Quản lý phòng ký túc xá
+    private static void manageDormRooms(CrudManager<DormRoom> dormRoomManager, Scanner scanner) {
+        System.out.println("---- Quản lý phòng ký túc xá ----");
+        System.out.println("1. Thêm phòng mới");
+        System.out.println("2. Hiển thị danh sách phòng");
+        System.out.println("3. Trở lại");
+        System.out.print("Chọn chức năng (1-3): ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+
+        switch (choice) {
+            case 1:
+                addDormRoom(dormRoomManager, scanner);
+                break;
+            case 2:
+                PrintList.hienThiBangPhong(dormRoomManager);
+                break;
+            case 3:
+                return;
+            default:
+                System.out.println("Lựa chọn không hợp lệ. Vui lòng thử lại.");
+        }
+    }
+
+    // Thêm phòng mới
+    private static void addDormRoom(CrudManager<DormRoom> dormRoomManager, Scanner scanner) {
+        System.out.print("Nhập Room ID: ");
+        String dormRoomID = scanner.nextLine();
+        System.out.print("Nhập Price: ");
+        double price = scanner.nextDouble();
+        scanner.nextLine();  // Consume newline
+        System.out.print("Nhập Building: ");
+        String building = scanner.nextLine();
+        System.out.print("Nhập Room Status (available/occupied): ");
+        String roomStatus = scanner.nextLine();
+
+        DormRoom dormRoom = new DormRoom(dormRoomID, price, building, roomStatus);
+        dormRoomManager.add(dormRoom);
+        System.out.println("Phòng ký túc xá đã được thêm!");
+    }
+
+    // Quản lý sinh viên
+    private static void manageStudents(CrudManager<Student> studentManager, Scanner scanner) {
+        System.out.println("---- Quản lý sinh viên ----");
+        System.out.println("1. Thêm sinh viên mới");
+        System.out.println("2. Hiển thị danh sách sinh viên");
+        System.out.println("3. Trở lại");
+        System.out.print("Chọn chức năng (1-3): ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+
+        switch (choice) {
+            case 1:
+                addStudent(studentManager, scanner);
+                break;
+            case 2:
+                PrintList.hienThiDanhSachSinhVien(studentManager);
+                break;
+            case 3:
+                return;
+            default:
+                System.out.println("Lựa chọn không hợp lệ. Vui lòng thử lại.");
+        }
+    }
+
+    // Thêm sinh viên mới
+    private static void addStudent(CrudManager<Student> studentManager, Scanner scanner) {
+        System.out.print("Nhập Student ID: ");
+        String studentID = scanner.nextLine();
+        System.out.print("Nhập Name: ");
+        String name = scanner.nextLine();
+        System.out.print("Nhập Phone Number: ");
+        String phoneNumber = scanner.nextLine();
+        System.out.print("Nhập Dorm Room ID: ");
+        String dormRoomID = scanner.nextLine();
+
+        Student student = new Student(studentID, name, phoneNumber, dormRoomID);
+        studentManager.add(student);
+        System.out.println("Sinh viên đã được thêm!");
+    }
+
+    // Quản lý hợp đồng thuê phòng
+    private static void manageRentalContracts(CrudManager<RentalContract> rentalContractManager, 
+                                               CrudManager<Student> studentManager, 
+                                               CrudManager<DormRoom> dormRoomManager, 
+                                               Scanner scanner) {
+        System.out.println("---- Quản lý hợp đồng thuê phòng ----");
+        System.out.println("1. Thêm hợp đồng mới");
+        System.out.println("2. Hiển thị danh sách hợp đồng");
+        System.out.println("3. Trở lại");
+        System.out.print("Chọn chức năng (1-3): ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+
+        switch (choice) {
+            case 1:
+                addRentalContract(rentalContractManager, studentManager, dormRoomManager, scanner);
+                break;
+            case 2:
+                PrintList.hienThiDanhSachHopDong(rentalContractManager);
+                break;
+            case 3:
+                return;
+            default:
+                System.out.println("Lựa chọn không hợp lệ. Vui lòng thử lại.");
+        }
+    }
+
+    // Thêm hợp đồng mới
+    private static void addRentalContract(CrudManager<RentalContract> rentalContractManager, 
+                                           CrudManager<Student> studentManager, 
+                                           CrudManager<DormRoom> dormRoomManager, 
+                                           Scanner scanner) {
+        System.out.print("Nhập Contract ID: ");
+        String contractID = scanner.nextLine();
+        System.out.print("Nhập Student ID: ");
+        String studentID = scanner.nextLine();
+        System.out.print("Nhập Dorm Room ID: ");
+        String dormRoomID = scanner.nextLine();
+        System.out.print("Nhập Start Date (yyyy-mm-dd): ");
+        String startDateStr = scanner.nextLine();
+        System.out.print("Nhập End Date (yyyy-mm-dd): ");
+        String endDateStr = scanner.nextLine();
+
+        // Giả sử rằng bạn có cách để chuyển đổi String thành LocalDate
+        LocalDate startDate = LocalDate.parse(startDateStr);
+        LocalDate endDate = LocalDate.parse(endDateStr);
+
+        // Tạo đối tượng Student và DormRoom từ ID tương ứng (giả sử đã có)
+        Student student = studentManager.getItemById(studentID);  // Tìm kiếm sinh viên theo ID
+        DormRoom dormRoom = dormRoomManager.getItemById(dormRoomID);  // Tìm kiếm phòng theo ID
+
+        // Kiểm tra nếu không tìm thấy sinh viên hoặc phòng
+        if (student == null || dormRoom == null) {
+            System.out.println("Không tìm thấy sinh viên hoặc phòng ký túc xá.");
+            return;
+        }
+
+        // Tạo hợp đồng thuê phòng
+        RentalContract rentalContract = new RentalContract(contractID, student, dormRoom, startDate, endDate);
+        rentalContractManager.add(rentalContract);  // Thêm hợp đồng vào quản lý
+        System.out.println("Hợp đồng thuê phòng đã được thêm!");
+    }
 }

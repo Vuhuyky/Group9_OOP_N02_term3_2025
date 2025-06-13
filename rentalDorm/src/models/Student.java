@@ -19,16 +19,27 @@ public class Student implements Identifiable {
         return studentID;
     }
 
+    // Getter cho studentID
+    public String getStudentID() {
+        return studentID;
+    }
+
+    // Getter cho dormRoomID, name, phoneNumber
     public String getDormRoomID() {
         return dormRoomID;
     }
 
-    public void setDormRoomID(String dormRoomID) {
-        this.dormRoomID = dormRoomID;
+    public String getName() {
+        return name;
     }
 
-    public String getName() {
-        return name;  // Đảm bảo có phương thức getName()
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    // Setter cho dormRoomID
+    public void setDormRoomID(String dormRoomID) {
+        this.dormRoomID = dormRoomID;
     }
 
     @Override

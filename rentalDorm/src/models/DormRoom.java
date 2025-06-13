@@ -21,16 +21,30 @@ public class DormRoom implements Identifiable {
         return dormRoomID;
     }
 
+    // Getter cho dormRoomID
+    public String getDormRoomID() {
+        return dormRoomID;
+    }
+
+    // Getter cho các thuộc tính khác
+    public double getPrice() {
+        return price;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
     public String getRoomStatus() {
         return roomStatus;
     }
 
-    public void setRoomStatus(String roomStatus) {
-        this.roomStatus = roomStatus;
-    }
-
     public String getStudentID() {
         return studentID;
+    }
+
+    public void setRoomStatus(String roomStatus) {
+        this.roomStatus = roomStatus;
     }
 
     public void assignStudent(String studentID) {
@@ -50,10 +64,5 @@ public class DormRoom implements Identifiable {
     @Override
     public String toString() {
         return "Room ID: " + dormRoomID + ", Price: " + price + ", Building: " + building + ", Status: " + roomStatus;
-    }
-
-    // Thêm phương thức getDormRoomID để tương thích với lớp RentalContract
-    public String getDormRoomID() {
-        return dormRoomID;
     }
 }
