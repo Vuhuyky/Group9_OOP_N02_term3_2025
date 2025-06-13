@@ -2,22 +2,20 @@ import java.util.Scanner;
 import models.DormRoom;
 import models.Student;
 import models.RentalContract;
-import services.DormRoomService;
-import services.StudentService;
-import services.RentalContractService;
+import models.CrudManager;
 import java.time.LocalDate;
 
 public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Tạo các dịch vụ quản lý phòng ký túc xá, sinh viên, hợp đồng thuê phòng
-        DormRoomService dormRoomService = new DormRoomService();
-        StudentService studentService = new StudentService();
-        RentalContractService rentalContractService = new RentalContractService();
+        // Khởi tạo CrudManager cho các đối tượng
+        CrudManager<DormRoom> dormRoomManager = new CrudManager<>();
+        CrudManager<Student> studentManager = new CrudManager<>();
+        CrudManager<RentalContract> rentalContractManager = new CrudManager<>();
 
         while (true) {
-            // Hiển thị menu chính
+            // Menu chính
             System.out.println("\n---- Hệ thống quản lý ký túc xá ----");
             System.out.println("1. Quản lý phòng ký túc xá");
             System.out.println("2. Quản lý sinh viên");
@@ -29,13 +27,13 @@ public class App {
 
             switch (choice) {
                 case 1:
-                    manageDormRooms(dormRoomService, scanner);
+                    manageDormRooms(dormRoomManager, scanner);
                     break;
                 case 2:
-                    manageStudents(studentService, scanner);
+                    manageStudents(studentManager, scanner);
                     break;
                 case 3:
-                    manageRentalContracts(rentalContractService, scanner);
+                    manageRentalContracts(rentalContractManager, scanner);
                     break;
                 case 4:
                     System.out.println("Thoát chương trình.");
@@ -48,7 +46,7 @@ public class App {
     }
 
     // Quản lý phòng ký túc xá
-    private static void manageDormRooms(DormRoomService dormRoomService, Scanner scanner) {
+    private static void manageDormRooms(CrudManager<DormRoom> dormRoomManager, Scanner scanner) {
         System.out.println("\n--- Quản lý phòng ký túc xá ---");
         System.out.println("1. Thêm phòng");
         System.out.println("2. Liệt kê phòng");
@@ -72,12 +70,12 @@ public class App {
                 String roomStatus = scanner.nextLine();
 
                 DormRoom dormRoom = new DormRoom(dormRoomID, price, building, roomStatus);
-                dormRoomService.createDormRoom(dormRoom);
+                dormRoomManager.create(dormRoom);
                 break;
 
             case 2:
                 // Liệt kê phòng
-                dormRoomService.listAllDormRooms();
+                dormRoomManager.readAll();
                 break;
 
             case 3:
@@ -88,14 +86,14 @@ public class App {
                 String newRoomStatus = scanner.nextLine();
 
                 DormRoom updatedDormRoom = new DormRoom(updateDormRoomID, 0, "", newRoomStatus);
-                dormRoomService.updateDormRoom(updateDormRoomID, updatedDormRoom);
+                dormRoomManager.update(updateDormRoomID, updatedDormRoom);
                 break;
 
             case 4:
                 // Xóa phòng
                 System.out.print("Nhập ID phòng để xóa: ");
                 String deleteDormRoomID = scanner.nextLine();
-                dormRoomService.deleteDormRoom(deleteDormRoomID);
+                dormRoomManager.delete(deleteDormRoomID);
                 break;
 
             default:
@@ -104,7 +102,7 @@ public class App {
     }
 
     // Quản lý sinh viên
-    private static void manageStudents(StudentService studentService, Scanner scanner) {
+    private static void manageStudents(CrudManager<Student> studentManager, Scanner scanner) {
         System.out.println("\n--- Quản lý sinh viên ---");
         System.out.println("1. Thêm sinh viên");
         System.out.println("2. Liệt kê sinh viên");
@@ -127,12 +125,12 @@ public class App {
                 String dormRoomID = scanner.nextLine();
 
                 Student student = new Student(studentID, name, phone, dormRoomID);
-                studentService.createStudent(student);
+                studentManager.create(student);
                 break;
 
             case 2:
                 // Liệt kê sinh viên
-                studentService.listAllStudents();
+                studentManager.readAll();
                 break;
 
             case 3:
@@ -143,14 +141,14 @@ public class App {
                 String newDormRoomID = scanner.nextLine();
 
                 Student updatedStudent = new Student(updateStudentID, "", "", newDormRoomID);
-                studentService.updateStudent(updateStudentID, updatedStudent);
+                studentManager.update(updateStudentID, updatedStudent);
                 break;
 
             case 4:
                 // Xóa sinh viên
                 System.out.print("Nhập ID sinh viên để xóa: ");
                 String deleteStudentID = scanner.nextLine();
-                studentService.deleteStudent(deleteStudentID);
+                studentManager.delete(deleteStudentID);
                 break;
 
             default:
@@ -159,7 +157,7 @@ public class App {
     }
 
     // Quản lý hợp đồng thuê phòng
-    private static void manageRentalContracts(RentalContractService rentalContractService, Scanner scanner) {
+    private static void manageRentalContracts(CrudManager<RentalContract> rentalContractManager, Scanner scanner) {
         System.out.println("\n--- Quản lý hợp đồng thuê phòng ---");
         System.out.println("1. Thêm hợp đồng");
         System.out.println("2. Liệt kê hợp đồng");
@@ -183,14 +181,13 @@ public class App {
                 System.out.print("Nhập ngày kết thúc hợp đồng (yyyy-mm-dd): ");
                 String endDate = scanner.nextLine();
 
-                // Tạo đối tượng hợp đồng và thêm vào hệ thống
                 RentalContract rentalContract = new RentalContract(contractID, studentID, dormRoomID, LocalDate.parse(startDate), LocalDate.parse(endDate));
-                rentalContractService.createRentalContract(rentalContract);
+                rentalContractManager.create(rentalContract);
                 break;
 
             case 2:
                 // Liệt kê hợp đồng
-                rentalContractService.listAllRentalContracts();
+                rentalContractManager.readAll();
                 break;
 
             case 3:
@@ -200,14 +197,14 @@ public class App {
                 System.out.print("Nhập ngày kết thúc hợp đồng mới: ");
                 String newEndDate = scanner.nextLine();
                 RentalContract updatedRentalContract = new RentalContract(updateContractID, studentID, dormRoomID, LocalDate.now(), LocalDate.parse(newEndDate));
-                rentalContractService.updateRentalContract(updateContractID, updatedRentalContract);
+                rentalContractManager.update(updateContractID, updatedRentalContract);
                 break;
 
             case 4:
                 // Xóa hợp đồng
                 System.out.print("Nhập ID hợp đồng để xóa: ");
                 String deleteContractID = scanner.nextLine();
-                rentalContractService.deleteRentalContract(deleteContractID);
+                rentalContractManager.delete(deleteContractID);
                 break;
 
             default:
