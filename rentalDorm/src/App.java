@@ -30,7 +30,7 @@ public class App {
 
             switch (choice) {
                 case 1:
-                    manageDormRooms(dormRoomManager, scanner);
+                    manageDormRooms(dormRoomManager, studentManager, scanner);
                     break;
                 case 2:
                     manageStudents(studentManager, scanner);
@@ -49,12 +49,15 @@ public class App {
     }
 
     // Quản lý phòng ký túc xá
-    private static void manageDormRooms(CrudManager<DormRoom> dormRoomManager, Scanner scanner) {
+    private static void manageDormRooms(CrudManager<DormRoom> dormRoomManager, 
+                                        CrudManager<Student> studentManager, 
+                                        Scanner scanner) {
         System.out.println("---- Quản lý phòng ký túc xá ----");
         System.out.println("1. Thêm phòng mới");
         System.out.println("2. Hiển thị danh sách phòng");
-        System.out.println("3. Trở lại");
-        System.out.print("Chọn chức năng (1-3): ");
+        System.out.println("3. Gán sinh viên vào phòng");
+        System.out.println("4. Trở lại");
+        System.out.print("Chọn chức năng (1-4): ");
         int choice = scanner.nextInt();
         scanner.nextLine();  // Consume newline
 
@@ -66,6 +69,9 @@ public class App {
                 PrintList.hienThiBangPhong(dormRoomManager);
                 break;
             case 3:
+                assignStudentToRoom(dormRoomManager, studentManager, scanner);
+                break;
+            case 4:
                 return;
             default:
                 System.out.println("Lựa chọn không hợp lệ. Vui lòng thử lại.");
@@ -87,6 +93,35 @@ public class App {
         DormRoom dormRoom = new DormRoom(dormRoomID, price, building, roomStatus);
         dormRoomManager.add(dormRoom);
         System.out.println("Phòng ký túc xá đã được thêm!");
+    }
+
+    // Gán sinh viên vào phòng
+    private static void assignStudentToRoom(CrudManager<DormRoom> dormRoomManager, 
+                                             CrudManager<Student> studentManager, 
+                                             Scanner scanner) {
+        System.out.print("Nhập Student ID: ");
+        String studentID = scanner.nextLine();
+        System.out.print("Nhập Dorm Room ID: ");
+        String dormRoomID = scanner.nextLine();
+
+        // Tìm sinh viên và phòng theo ID
+        Student student = studentManager.getItemById(studentID);
+        DormRoom dormRoom = dormRoomManager.getItemById(dormRoomID);
+
+        // Kiểm tra nếu sinh viên và phòng có tồn tại
+        if (student == null) {
+            System.out.println("Không tìm thấy sinh viên với ID: " + studentID);
+            return;
+        }
+        if (dormRoom == null) {
+            System.out.println("Không tìm thấy phòng với ID: " + dormRoomID);
+            return;
+        }
+
+        // Gán sinh viên vào phòng
+        dormRoom.assignStudent(studentID);  // Gán sinh viên vào phòng
+        student.setDormRoomID(dormRoomID);
+        System.out.println("Sinh viên " + student.getName() + " đã được gán vào phòng " + dormRoomID);
     }
 
     // Quản lý sinh viên
