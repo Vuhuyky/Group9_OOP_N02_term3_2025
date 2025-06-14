@@ -1,4 +1,4 @@
-package Review;
+package com.example.servingwebcontent.utils;
 
 public class Sequence<T> {
     private Object[] objects;

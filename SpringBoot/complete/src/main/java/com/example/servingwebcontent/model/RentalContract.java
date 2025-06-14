@@ -1,11 +1,22 @@
-package models;
+package com.example.servingwebcontent.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
+@Entity
 public class RentalContract implements Identifiable {
+
+    @Id
     private String contractID;
+
+    @ManyToOne
     private Student student;
+
+    @ManyToOne
     private DormRoom dormRoom;
+
     private LocalDate startDate;
     private LocalDate endDate;
 
@@ -23,7 +34,6 @@ public class RentalContract implements Identifiable {
         return contractID;
     }
 
-    // Getter cho student, dormRoom, startDate, endDate
     public Student getStudent() {
         return student;
     }
@@ -41,7 +51,7 @@ public class RentalContract implements Identifiable {
     }
 
     public String getDormRoomID() {
-        return dormRoom.getDormRoomID();
+        return dormRoom.getDormRoomID().toString();
     }
 
     public LocalDate getStartDate() {

@@ -1,6 +1,12 @@
-package models;
+package com.example.servingwebcontent.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Student implements Identifiable {
+
+    @Id
     private String studentID;
     private String name;
     private String phoneNumber;
@@ -19,12 +25,10 @@ public class Student implements Identifiable {
         return studentID;
     }
 
-    // Getter cho studentID
     public String getStudentID() {
         return studentID;
     }
 
-    // Getter cho dormRoomID, name, phoneNumber
     public String getDormRoomID() {
         return dormRoomID;
     }
@@ -37,7 +41,6 @@ public class Student implements Identifiable {
         return phoneNumber;
     }
 
-    // Setter cho dormRoomID
     public void setDormRoomID(String dormRoomID) {
         this.dormRoomID = dormRoomID;
     }

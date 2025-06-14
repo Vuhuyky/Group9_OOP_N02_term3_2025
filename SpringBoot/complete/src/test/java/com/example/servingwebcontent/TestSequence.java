@@ -1,37 +1,37 @@
-package test;
+package com.example.servingwebcontent;
 
-import models.RentalContract;
-import models.Student;
-import models.DormRoom;
-import services.RentalContractService;
+import com.example.servingwebcontent.model.DormRoom;
+import com.example.servingwebcontent.model.Student;
+import com.example.servingwebcontent.model.RentalContract;
+import com.example.servingwebcontent.service.DormRoomService;
+import com.example.servingwebcontent.service.StudentService;
+import com.example.servingwebcontent.service.RentalContractService;
 
 import java.time.LocalDate;
 
-public class RentalContractTest {
+public class TestSequence {
     public static void main(String[] args) {
-        // Khởi tạo dịch vụ quản lý hợp đồng thuê phòng
+        DormRoomService dormRoomService = new DormRoomService();
+        StudentService studentService = new StudentService();
         RentalContractService rentalContractService = new RentalContractService();
 
-        // Tạo các đối tượng cần thiết
-        DormRoom dormRoom1 = new DormRoom("D001", 1000, "Building A", "available");
+        DormRoom dormRoom1 = new DormRoom("D001", 5000, "Building A", "available");
+        dormRoomService.createDormRoom(dormRoom1);
+
         Student student1 = new Student("S001", "John Doe", "123456789", "D001");
-        
-        // Tạo hợp đồng thuê phòng
+        studentService.createStudent(student1);
+
         RentalContract rentalContract1 = new RentalContract("C001", student1, dormRoom1, LocalDate.now(), LocalDate.now().plusMonths(6));
         rentalContractService.createRentalContract(rentalContract1);
 
-        // Liệt kê tất cả hợp đồng thuê phòng
         System.out.println("Danh sách hợp đồng thuê phòng:");
         rentalContractService.listAllRentalContracts();
 
-        // Cập nhật hợp đồng thuê phòng
-        rentalContract1 = new RentalContract("C001", student1, dormRoom1, LocalDate.now(), LocalDate.now().plusMonths(12)); // Mở rộng hợp đồng
+        rentalContract1 = new RentalContract("C001", student1, dormRoom1, LocalDate.now(), LocalDate.now().plusMonths(12));
         rentalContractService.updateRentalContract(rentalContract1.getID(), rentalContract1);
 
-        // Xóa hợp đồng thuê phòng
         rentalContractService.deleteRentalContract(rentalContract1.getID());
 
-        // Kiểm thử lại sau khi cập nhật và xóa
         System.out.println("Danh sách hợp đồng thuê phòng sau khi xóa:");
         rentalContractService.listAllRentalContracts();
     }

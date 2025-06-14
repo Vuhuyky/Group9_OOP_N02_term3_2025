@@ -1,9 +1,14 @@
-package models;
+package com.example.servingwebcontent.service;
+
+import com.example.servingwebcontent.model.Identifiable;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class CrudManager<T extends Identifiable> {
+
     private List<T> items = new ArrayList<>(); // Danh sách các đối tượng được quản lý
 
     // Create: thêm đối tượng mới vào danh sách

@@ -1,11 +1,21 @@
-package models;
+package com.example.servingwebcontent.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
+@Entity
 public class DormRoom implements Identifiable {
-    private String dormRoomID;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long dormRoomID;  // ID tự động tăng
+
     private double price;
     private String building;
-    private String roomStatus; // "available" or "occupied"
-    private String studentID; // Sinh viên hiện tại nếu có
+    private String roomStatus;  // "available" or "occupied"
+    private String studentID;  // Sinh viên hiện tại nếu có
 
     // Constructor
     public DormRoom(String dormRoomID, double price, String building, String roomStatus) {
@@ -13,12 +23,12 @@ public class DormRoom implements Identifiable {
         this.price = price;
         this.building = building;
         this.roomStatus = roomStatus;
-        this.studentID = null; // Chưa có sinh viên
+        this.studentID = null;  // Chưa có sinh viên
     }
 
     @Override
     public String getID() {
-        return dormRoomID;
+        return dormRoomID.toString();
     }
 
     public String getRoomStatus() {
@@ -36,7 +46,7 @@ public class DormRoom implements Identifiable {
     public void assignStudent(String studentID) {
         if (this.roomStatus.equals("available")) {
             this.studentID = studentID;
-            this.roomStatus = "occupied"; // Cập nhật trạng thái phòng
+            this.roomStatus = "occupied";  // Cập nhật trạng thái phòng
         } else {
             System.out.println("Phòng đã có người thuê.");
         }
@@ -44,7 +54,7 @@ public class DormRoom implements Identifiable {
 
     public void removeStudent() {
         this.studentID = null;
-        this.roomStatus = "available"; // Cập nhật lại trạng thái phòng
+        this.roomStatus = "available";  // Cập nhật lại trạng thái phòng
     }
 
     @Override
@@ -53,7 +63,7 @@ public class DormRoom implements Identifiable {
     }
 
     // Thêm phương thức getDormRoomID để tương thích với lớp RentalContract
-    public String getDormRoomID() {
+    public Long getDormRoomID() {
         return dormRoomID;
     }
 }
