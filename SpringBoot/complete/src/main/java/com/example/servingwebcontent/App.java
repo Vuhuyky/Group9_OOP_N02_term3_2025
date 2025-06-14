@@ -1,22 +1,18 @@
 import java.util.Scanner;
-import models.DormRoom;
-import models.Student;
-import models.RentalContract;
-import models.CrudManager;
-import CRUD.PrintList;
-import CRUD.Search;
-import CRUD.Output;
-import java.time.LocalDate;
+import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 
 public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Khởi tạo CrudManager cho các đối tượng
-        CrudManager<DormRoom> dormRoomManager = new CrudManager<>();
-        CrudManager<Student> studentManager = new CrudManager<>();
-        CrudManager<RentalContract> rentalContractManager = new CrudManager<>();
-
+        // Khởi tạo RestTemplate để gọi API
+        RestTemplate restTemplate = new RestTemplate();
+        
         while (true) {
             // Menu chính
             System.out.println("\n---- Hệ thống quản lý ký túc xá ----");
@@ -30,13 +26,13 @@ public class App {
 
             switch (choice) {
                 case 1:
-                    manageDormRooms(dormRoomManager, studentManager, scanner);
+                    manageDormRooms(restTemplate, scanner);
                     break;
                 case 2:
-                    manageStudents(studentManager, scanner);
+                    manageStudents(restTemplate, scanner);
                     break;
                 case 3:
-                    manageRentalContracts(rentalContractManager, studentManager, dormRoomManager, scanner);
+                    manageRentalContracts(restTemplate, scanner);
                     break;
                 case 4:
                     System.out.println("Thoát chương trình.");
@@ -49,9 +45,7 @@ public class App {
     }
 
     // Quản lý phòng ký túc xá
-    private static void manageDormRooms(CrudManager<DormRoom> dormRoomManager, 
-                                        CrudManager<Student> studentManager, 
-                                        Scanner scanner) {
+    private static void manageDormRooms(RestTemplate restTemplate, Scanner scanner) {
         System.out.println("---- Quản lý phòng ký túc xá ----");
         System.out.println("1. Thêm phòng mới");
         System.out.println("2. Hiển thị danh sách phòng");
@@ -63,13 +57,13 @@ public class App {
 
         switch (choice) {
             case 1:
-                addDormRoom(dormRoomManager, scanner);
+                addDormRoom(restTemplate, scanner);
                 break;
             case 2:
-                PrintList.hienThiBangPhong(dormRoomManager);
+                displayDormRooms(restTemplate);
                 break;
             case 3:
-                assignStudentToRoom(dormRoomManager, studentManager, scanner);
+                assignStudentToRoom(restTemplate, scanner);
                 break;
             case 4:
                 return;
@@ -79,7 +73,7 @@ public class App {
     }
 
     // Thêm phòng mới
-    private static void addDormRoom(CrudManager<DormRoom> dormRoomManager, Scanner scanner) {
+    private static void addDormRoom(RestTemplate restTemplate, Scanner scanner) {
         System.out.print("Nhập Room ID: ");
         String dormRoomID = scanner.nextLine();
         System.out.print("Nhập Price: ");
@@ -90,42 +84,52 @@ public class App {
         System.out.print("Nhập Room Status (available/occupied): ");
         String roomStatus = scanner.nextLine();
 
+        // Tạo đối tượng DormRoom và gửi đến API
         DormRoom dormRoom = new DormRoom(dormRoomID, price, building, roomStatus);
-        dormRoomManager.add(dormRoom);
+        restTemplate.postForObject("http://localhost:8080/dormrooms", dormRoom, DormRoom.class);
         System.out.println("Phòng ký túc xá đã được thêm!");
     }
 
+    // Hiển thị danh sách phòng ký túc xá
+    private static void displayDormRooms(RestTemplate restTemplate) {
+        ResponseEntity<List<DormRoom>> dormRoomsResponse = restTemplate.exchange(
+            "http://localhost:8080/dormrooms", 
+            HttpMethod.GET, 
+            null, 
+            new ParameterizedTypeReference<List<DormRoom>>() {}
+        );
+        
+        List<DormRoom> dormRooms = dormRoomsResponse.getBody();
+        dormRooms.forEach(dormRoom -> System.out.println(dormRoom));
+    }
+
     // Gán sinh viên vào phòng
-    private static void assignStudentToRoom(CrudManager<DormRoom> dormRoomManager, 
-                                             CrudManager<Student> studentManager, 
-                                             Scanner scanner) {
+    private static void assignStudentToRoom(RestTemplate restTemplate, Scanner scanner) {
         System.out.print("Nhập Student ID: ");
         String studentID = scanner.nextLine();
         System.out.print("Nhập Dorm Room ID: ");
         String dormRoomID = scanner.nextLine();
 
-        // Tìm sinh viên và phòng theo ID
-        Student student = studentManager.getItemById(studentID);
-        DormRoom dormRoom = dormRoomManager.getItemById(dormRoomID);
+        // Lấy sinh viên và phòng từ API
+        Student student = restTemplate.getForObject("http://localhost:8080/students/" + studentID, Student.class);
+        DormRoom dormRoom = restTemplate.getForObject("http://localhost:8080/dormrooms/" + dormRoomID, DormRoom.class);
 
-        // Kiểm tra nếu sinh viên và phòng có tồn tại
-        if (student == null) {
-            System.out.println("Không tìm thấy sinh viên với ID: " + studentID);
-            return;
-        }
-        if (dormRoom == null) {
-            System.out.println("Không tìm thấy phòng với ID: " + dormRoomID);
+        if (student == null || dormRoom == null) {
+            System.out.println("Không tìm thấy sinh viên hoặc phòng.");
             return;
         }
 
         // Gán sinh viên vào phòng
         dormRoom.assignStudent(studentID);  // Gán sinh viên vào phòng
         student.setDormRoomID(dormRoomID);
+        restTemplate.put("http://localhost:8080/students/" + studentID, student);
+        restTemplate.put("http://localhost:8080/dormrooms/" + dormRoomID, dormRoom);
+
         System.out.println("Sinh viên " + student.getName() + " đã được gán vào phòng " + dormRoomID);
     }
 
     // Quản lý sinh viên
-    private static void manageStudents(CrudManager<Student> studentManager, Scanner scanner) {
+    private static void manageStudents(RestTemplate restTemplate, Scanner scanner) {
         System.out.println("---- Quản lý sinh viên ----");
         System.out.println("1. Thêm sinh viên mới");
         System.out.println("2. Hiển thị danh sách sinh viên");
@@ -136,10 +140,10 @@ public class App {
 
         switch (choice) {
             case 1:
-                addStudent(studentManager, scanner);
+                addStudent(restTemplate, scanner);
                 break;
             case 2:
-                PrintList.hienThiDanhSachSinhVien(studentManager);
+                displayStudents(restTemplate);
                 break;
             case 3:
                 return;
@@ -149,7 +153,7 @@ public class App {
     }
 
     // Thêm sinh viên mới
-    private static void addStudent(CrudManager<Student> studentManager, Scanner scanner) {
+    private static void addStudent(RestTemplate restTemplate, Scanner scanner) {
         System.out.print("Nhập Student ID: ");
         String studentID = scanner.nextLine();
         System.out.print("Nhập Name: ");
@@ -159,16 +163,27 @@ public class App {
         System.out.print("Nhập Dorm Room ID: ");
         String dormRoomID = scanner.nextLine();
 
+        // Tạo đối tượng Student và gửi đến API
         Student student = new Student(studentID, name, phoneNumber, dormRoomID);
-        studentManager.add(student);
+        restTemplate.postForObject("http://localhost:8080/students", student, Student.class);
         System.out.println("Sinh viên đã được thêm!");
     }
 
+    // Hiển thị danh sách sinh viên
+    private static void displayStudents(RestTemplate restTemplate) {
+        ResponseEntity<List<Student>> studentsResponse = restTemplate.exchange(
+            "http://localhost:8080/students", 
+            HttpMethod.GET, 
+            null, 
+            new ParameterizedTypeReference<List<Student>>() {}
+        );
+        
+        List<Student> students = studentsResponse.getBody();
+        students.forEach(student -> System.out.println(student));
+    }
+
     // Quản lý hợp đồng thuê phòng
-    private static void manageRentalContracts(CrudManager<RentalContract> rentalContractManager, 
-                                               CrudManager<Student> studentManager, 
-                                               CrudManager<DormRoom> dormRoomManager, 
-                                               Scanner scanner) {
+    private static void manageRentalContracts(RestTemplate restTemplate, Scanner scanner) {
         System.out.println("---- Quản lý hợp đồng thuê phòng ----");
         System.out.println("1. Thêm hợp đồng mới");
         System.out.println("2. Hiển thị danh sách hợp đồng");
@@ -179,10 +194,10 @@ public class App {
 
         switch (choice) {
             case 1:
-                addRentalContract(rentalContractManager, studentManager, dormRoomManager, scanner);
+                addRentalContract(restTemplate, scanner);
                 break;
             case 2:
-                PrintList.hienThiDanhSachHopDong(rentalContractManager);
+                displayRentalContracts(restTemplate);
                 break;
             case 3:
                 return;
@@ -192,10 +207,7 @@ public class App {
     }
 
     // Thêm hợp đồng mới
-    private static void addRentalContract(CrudManager<RentalContract> rentalContractManager, 
-                                           CrudManager<Student> studentManager, 
-                                           CrudManager<DormRoom> dormRoomManager, 
-                                           Scanner scanner) {
+    private static void addRentalContract(RestTemplate restTemplate, Scanner scanner) {
         System.out.print("Nhập Contract ID: ");
         String contractID = scanner.nextLine();
         System.out.print("Nhập Student ID: ");
@@ -207,23 +219,35 @@ public class App {
         System.out.print("Nhập End Date (yyyy-mm-dd): ");
         String endDateStr = scanner.nextLine();
 
-        // Giả sử rằng bạn có cách để chuyển đổi String thành LocalDate
+        // Chuyển đổi String thành LocalDate
         LocalDate startDate = LocalDate.parse(startDateStr);
         LocalDate endDate = LocalDate.parse(endDateStr);
 
-        // Tạo đối tượng Student và DormRoom từ ID tương ứng (giả sử đã có)
-        Student student = studentManager.getItemById(studentID);  // Tìm kiếm sinh viên theo ID
-        DormRoom dormRoom = dormRoomManager.getItemById(dormRoomID);  // Tìm kiếm phòng theo ID
+        // Lấy sinh viên và phòng từ API
+        Student student = restTemplate.getForObject("http://localhost:8080/students/" + studentID, Student.class);
+        DormRoom dormRoom = restTemplate.getForObject("http://localhost:8080/dormrooms/" + dormRoomID, DormRoom.class);
 
-        // Kiểm tra nếu không tìm thấy sinh viên hoặc phòng
         if (student == null || dormRoom == null) {
-            System.out.println("Không tìm thấy sinh viên hoặc phòng ký túc xá.");
+            System.out.println("Không tìm thấy sinh viên hoặc phòng.");
             return;
         }
 
         // Tạo hợp đồng thuê phòng
         RentalContract rentalContract = new RentalContract(contractID, student, dormRoom, startDate, endDate);
-        rentalContractManager.add(rentalContract);  // Thêm hợp đồng vào quản lý
+        restTemplate.postForObject("http://localhost:8080/rentalcontracts", rentalContract, RentalContract.class);
         System.out.println("Hợp đồng thuê phòng đã được thêm!");
+    }
+
+    // Hiển thị danh sách hợp đồng
+    private static void displayRentalContracts(RestTemplate restTemplate) {
+        ResponseEntity<List<RentalContract>> rentalContractsResponse = restTemplate.exchange(
+            "http://localhost:8080/rentalcontracts", 
+            HttpMethod.GET, 
+            null, 
+            new ParameterizedTypeReference<List<RentalContract>>() {}
+        );
+        
+        List<RentalContract> rentalContracts = rentalContractsResponse.getBody();
+        rentalContracts.forEach(contract -> System.out.println(contract));
     }
 }
