@@ -1,7 +1,0 @@
-com\group9oop\dormitorymanagement\TestStudent.class
-com\group9oop\dormitorymanagement\service\RoomService.class
-com\group9oop\dormitorymanagement\controller\RoomController.class
-com\group9oop\dormitorymanagement\DormitorymanagementApplication.class
-com\group9oop\dormitorymanagement\repository\RoomRepositoryJdbc.class
-com\group9oop\dormitorymanagement\model\Room.class
-com\group9oop\dormitorymanagement\model\Student.class
