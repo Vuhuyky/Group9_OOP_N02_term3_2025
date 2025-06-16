@@ -51,41 +51,59 @@ Nội dung 03:
     + Activity Diagram mô tả luồng xử lý nghiệp vụ chính (ví dụ: quy trình thuê phòng, trả phòng).
 
 
-## Kiểm thử (Test)
+## Lưu đồ thuật toán
+![luudo](https://github.com/user-attachments/assets/9b82c599-9981-474d-9746-b251ae7a84ca)
 
-Phần này hướng dẫn cách verify CRUD cho 3 đối tượng: **Student**, **Room**, **Payment**, dùng cURL (hoặc Postman).
 
-### Môi trường chạy
-- Java 11+  
-- Maven: `mvn clean install`  
-- Khởi động server: `mvn spring-boot:run`
+**Phân chia:**
+*Đỗ Minh Nhật* 
+**Chức năng:** Kiểm tra xem phòng có tồn tại hay không.
 
----
+Miêu tả công việc:
 
-### CRUD Student
+- Viết phương thức để kiểm tra sự tồn tại của phòng trong cơ sở dữ liệu.
 
-| Method | URL                    | Body (JSON)                             | Mô tả                   |
-| ------ | ---------------------- | --------------------------------------- | ----------------------- |
-| POST   | `/students`            | `{ "id":"S001","fullName":"Nguyen A" }` | Tạo mới sinh viên       |
-| GET    | `/students`            | —                                       | Lấy danh sách tất cả    |
-| GET    | `/students/{id}`       | —                                       | Lấy sinh viên theo ID   |
-| PUT    | `/students/{id}`       | `{ "fullName":"Nguyen B" }`             | Cập nhật tên sinh viên  |
-| DELETE | `/students/{id}`       | —                                       | Xoá sinh viên theo ID   |
+- Phương thức này nhận ID phòng và tìm kiếm phòng trong cơ sở dữ liệu.
 
-**Ví dụ cURL**:
-```bash
-# Tạo
-curl -X POST localhost:8080/students \
-  -H "Content-Type: application/json" \
-  -d '{"id":"S001","fullName":"Nguyen A"}'
+- Trả về thông báo nếu phòng không tồn tại.
+- 
+public boolean isRoomExist(String roomId) {
+    return roomRepository.existsById(roomId); // Kiểm tra sự tồn tại của phòng
+}
 
-# Lấy all
-curl localhost:8080/students
 
-# Cập nhật
-curl -X PUT localhost:8080/students/S001 \
-  -H "Content-Type: application/json" \
-  -d '{"fullName":"Nguyen B"}'
 
-# Xoá
-curl -X DELETE localhost:8080/students/S001
+*Vũ Huy Kỳ*
+**Chức năng:** Kiểm tra phòng có đầy hay không và đăng ký sinh viên vào phòng.
+
+Miêu tả công việc:
+
+- Viết phương thức để kiểm tra phòng có đầy hay không (dựa vào số lượng sinh viên đã đăng ký trong phòng).
+
+- Nếu phòng chưa đầy, tiếp tục đăng ký sinh viên vào phòng.
+
+- Cập nhật thông tin sinh viên, ghi nhận ngày check-in và gán phòng cho sinh viên.
+- 
+public boolean assignStudentToRoom(String studentId, String roomId) {
+    // Kiểm tra phòng có tồn tại
+    if (!roomService.isRoomExist(roomId)) {
+        return false; // Nếu phòng không tồn tại
+    }
+
+    Room room = roomService.findById(roomId).orElseThrow();
+    // Kiểm tra phòng đã đầy chưa
+    int currentOccupancy = studentRepository.countByRoomId(roomId);
+    if (currentOccupancy >= room.getCapacity()) {
+        return false; // Phòng đã đầy
+    }
+
+    // Đăng ký sinh viên vào phòng
+    Student student = studentService.findById(studentId).orElseThrow();
+    student.setRoomId(roomId);
+    student.setCheckedIn(true);
+    student.setCheckInDate(LocalDate.now());
+    student.setCheckOutDate(null); // reset ngày check-out nếu có
+
+    studentRepository.save(student);
+    return true; // Đăng ký thành công
+}
