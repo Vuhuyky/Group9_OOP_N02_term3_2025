@@ -1,69 +1,50 @@
 package com.example.servingwebcontent.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import jakarta.persistence.*;
 
 @Entity
-public class DormRoom implements Identifiable {
-
+@Table(name = "dorm_room")
+public class DormRoom {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long dormRoomID;  // ID tự động tăng
+    @Column(name = "room_id")
+    private String roomId;
 
-    private double price;
-    private String building;
-    private String roomStatus;  // "available" or "occupied"
-    private String studentID;  // Sinh viên hiện tại nếu có
+    @Column(name = "room_name")
+    private String roomName;
 
-    // Constructor
-    public DormRoom(String dormRoomID, double price, String building, String roomStatus) {
-        this.dormRoomID = dormRoomID;
-        this.price = price;
-        this.building = building;
-        this.roomStatus = roomStatus;
-        this.studentID = null;  // Chưa có sinh viên
-    }
+    private int capacity;
 
-    @Override
-    public String getID() {
-        return dormRoomID.toString();
-    }
+    @Column(name = "current_occupancy")
+    private Integer currentOccupancy;
 
-    public String getRoomStatus() {
-        return roomStatus;
-    }
+    private String type;
 
-    public void setRoomStatus(String roomStatus) {
-        this.roomStatus = roomStatus;
-    }
+    // Sửa kiểu dữ liệu price thành Long để nhập số nguyên VNĐ
+    private Long price;
 
-    public String getStudentID() {
-        return studentID;
-    }
+    private String status; // "Còn trống", "Đã thuê", ...
 
-    public void assignStudent(String studentID) {
-        if (this.roomStatus.equals("available")) {
-            this.studentID = studentID;
-            this.roomStatus = "occupied";  // Cập nhật trạng thái phòng
-        } else {
-            System.out.println("Phòng đã có người thuê.");
-        }
-    }
+    public DormRoom() {}
 
-    public void removeStudent() {
-        this.studentID = null;
-        this.roomStatus = "available";  // Cập nhật lại trạng thái phòng
-    }
+    // Getters & Setters
+    public String getRoomId() { return roomId; }
+    public void setRoomId(String roomId) { this.roomId = roomId; }
 
-    @Override
-    public String toString() {
-        return "Room ID: " + dormRoomID + ", Price: " + price + ", Building: " + building + ", Status: " + roomStatus;
-    }
+    public String getRoomName() { return roomName; }
+    public void setRoomName(String roomName) { this.roomName = roomName; }
 
-    // Thêm phương thức getDormRoomID để tương thích với lớp RentalContract
-    public Long getDormRoomID() {
-        return dormRoomID;
-    }
+    public int getCapacity() { return capacity; }
+    public void setCapacity(int capacity) { this.capacity = capacity; }
+
+    public Integer getCurrentOccupancy() { return currentOccupancy; }
+    public void setCurrentOccupancy(Integer currentOccupancy) { this.currentOccupancy = currentOccupancy; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+
+    public Long getPrice() { return price; }
+    public void setPrice(Long price) { this.price = price; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }
