@@ -14,7 +14,10 @@ public class RoomService {
     private final List<Room> rooms = new ArrayList<>();
 
     // Thêm phòng mới
-   
+    public Room addRoom(Room room) {
+        rooms.add(room);
+        return room;
+    }
 
     // Cập nhật phòng (xóa cũ, thêm bản mới)
     public Room updateRoom(Room room) {
