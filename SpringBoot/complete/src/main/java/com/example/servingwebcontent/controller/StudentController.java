@@ -3,7 +3,7 @@ package com.example.servingwebcontent.controller;
 import com.example.servingwebcontent.model.Student;
 import com.example.servingwebcontent.model.RentalContract;
 import com.example.servingwebcontent.service.StudentService;
-import com.example.servingwebcontent.service.RentalContractService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
