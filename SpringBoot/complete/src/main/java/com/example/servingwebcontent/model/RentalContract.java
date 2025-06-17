@@ -1,73 +1,61 @@
 package com.example.servingwebcontent.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-public class RentalContract implements Identifiable {
-
+@Table(name = "rental_contract")
+public class RentalContract {
     @Id
-    private String contractID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "contract_id")
+    private Integer contractId;
 
     @ManyToOne
+    @JoinColumn(name = "student_id")
     private Student student;
 
     @ManyToOne
+    @JoinColumn(name = "room_id")
     private DormRoom dormRoom;
 
+    @Column(name = "start_date")
     private LocalDate startDate;
+
+    @Column(name = "end_date")
     private LocalDate endDate;
 
-    // Constructor
-    public RentalContract(String contractID, Student student, DormRoom dormRoom, LocalDate startDate, LocalDate endDate) {
-        this.contractID = contractID;
-        this.student = student;
-        this.dormRoom = dormRoom;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
+    private BigDecimal deposit;
 
-    @Override
-    public String getID() {
-        return contractID;
-    }
+    private String status; // "Còn hiệu lực", "Đã kết thúc", ...
 
-    public Student getStudent() {
-        return student;
-    }
+    private String note;
 
-    public DormRoom getDormRoom() {
-        return dormRoom;
-    }
+    public RentalContract() {}
 
-    public String getContractID() {
-        return contractID;
-    }
+    // Getters & Setters
+    public Integer getContractId() { return contractId; }
+    public void setContractId(Integer contractId) { this.contractId = contractId; }
 
-    public String getStudentID() {
-        return student.getStudentID();
-    }
+    public Student getStudent() { return student; }
+    public void setStudent(Student student) { this.student = student; }
 
-    public String getDormRoomID() {
-        return dormRoom.getDormRoomID().toString();
-    }
+    public DormRoom getDormRoom() { return dormRoom; }
+    public void setDormRoom(DormRoom dormRoom) { this.dormRoom = dormRoom; }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
+    public LocalDate getStartDate() { return startDate; }
+    public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
 
-    public LocalDate getEndDate() {
-        return endDate;
-    }
+    public LocalDate getEndDate() { return endDate; }
+    public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
 
-    @Override
-    public String toString() {
-        return "Contract ID: " + contractID + 
-               ", Student: " + student.getName() + 
-               ", Dorm Room: " + dormRoom.getDormRoomID() + 
-               ", Start Date: " + startDate + 
-               ", End Date: " + endDate;
-    }
+    public BigDecimal getDeposit() { return deposit; }
+    public void setDeposit(BigDecimal deposit) { this.deposit = deposit; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public String getNote() { return note; }
+    public void setNote(String note) { this.note = note; }
 }
