@@ -5,6 +5,7 @@ import com.example.servingwebcontent.repository.DormRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,23 +15,53 @@ public class DormRoomService {
     private DormRoomRepository dormRoomRepository;
 
     public List<DormRoom> getAllDormRooms() {
-        return dormRoomRepository.findAll();
+        try {
+            return dormRoomRepository.findAll();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        } finally {
+            
+        }
     }
 
     public Optional<DormRoom> getDormRoomById(String id) {
-        return dormRoomRepository.findById(id);
+        try {
+            return dormRoomRepository.findById(id);
+        } catch (Exception e) {
+            return Optional.empty();
+        } finally {
+            
+        }
     }
 
     public void saveDormRoom(DormRoom dormRoom) {
-        dormRoomRepository.save(dormRoom);
+        try {
+            dormRoomRepository.save(dormRoom);
+        } catch (Exception e) {
+            
+        } finally {
+            
+        }
     }
 
     public void deleteDormRoom(String id) {
-        dormRoomRepository.deleteById(id);
+        try {
+            dormRoomRepository.deleteById(id);
+        } catch (Exception e) {
+            
+        } finally {
+            
+        }
     }
 
     public List<DormRoom> getDormRoomsByStatus(String status) {
-        return dormRoomRepository.findByStatus(status);
+        try {
+            return dormRoomRepository.findByStatus(status);
+        } catch (Exception e) {
+            return Collections.emptyList();
+        } finally {
+            
+        }
     }
 
     public boolean isRoomExist(String roomId) {
@@ -39,7 +70,7 @@ public class DormRoomService {
         } catch (Exception e) {
             return false;
         } finally {
-
+            
         }
     }
 }

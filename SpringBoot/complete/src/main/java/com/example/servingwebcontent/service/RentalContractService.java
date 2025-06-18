@@ -5,6 +5,7 @@ import com.example.servingwebcontent.repository.RentalContractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,35 +15,82 @@ public class RentalContractService {
     private RentalContractRepository rentalContractRepository;
 
     public List<RentalContract> getAllContracts() {
-        return rentalContractRepository.findAll();
+        try {
+            return rentalContractRepository.findAll();
+        } catch (Exception e) {
+            return Collections.emptyList();
+        } finally {
+            
+        }
     }
 
     public Optional<RentalContract> getContractById(Integer id) {
-        return rentalContractRepository.findById(id);
+        try {
+            return rentalContractRepository.findById(id);
+        } catch (Exception e) {
+            return Optional.empty();
+        } finally {
+            
+        }
     }
 
     public void saveContract(RentalContract contract) {
-        rentalContractRepository.save(contract);
+        try {
+            rentalContractRepository.save(contract);
+        } catch (Exception e) {
+            
+        } finally {
+            
+        }
     }
 
     public void deleteContract(Integer id) {
-        rentalContractRepository.deleteById(id);
+        try {
+            rentalContractRepository.deleteById(id);
+        } catch (Exception e) {
+            
+        } finally {
+            
+        }
     }
 
     public int countActiveContractsByRoom(String roomId) {
-        return rentalContractRepository.findByDormRoom_RoomIdAndStatus(roomId, "Còn hiệu lực").size();
+        try {
+            return rentalContractRepository.findByDormRoom_RoomIdAndStatus(roomId, "Còn hiệu lực").size();
+        } catch (Exception e) {
+            return 0;
+        } finally {
+            
+        }
     }
 
     public List<RentalContract> findByDormRoom_RoomId(String roomId) {
-        return rentalContractRepository.findByDormRoom_RoomId(roomId);
+        try {
+            return rentalContractRepository.findByDormRoom_RoomId(roomId);
+        } catch (Exception e) {
+            return Collections.emptyList();
+        } finally {
+            
+        }
     }
 
     public List<RentalContract> findByStudent_StudentID(String studentId) {
-        return rentalContractRepository.findByStudent_StudentID(studentId);
+        try {
+            return rentalContractRepository.findByStudent_StudentID(studentId);
+        } catch (Exception e) {
+            return Collections.emptyList();
+        } finally {
+            
+        }
     }
 
-    // Thêm phương thức này để controller sử dụng
     public List<RentalContract> findByStudent_StudentIDAndStatus(String studentId, String status) {
-        return rentalContractRepository.findByStudent_StudentIDAndStatus(studentId, status);
+        try {
+            return rentalContractRepository.findByStudent_StudentIDAndStatus(studentId, status);
+        } catch (Exception e) {
+            return Collections.emptyList();
+        } finally {
+            
+        }
     }
-} // <-- Thêm dấu ngoặc nhọn này ở cuối file
+}
