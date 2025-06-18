@@ -44,11 +44,11 @@ Nội dung 02:
 
 Nội dung 03:
 
-# Sequence them phong
+**Sequence them phong**
 ![sequence them phong](https://github.com/user-attachments/assets/73e63c83-b0f5-406a-8375-1ccb4821c393)
-# Sequence hop dong
+**Sequence hop dong**
 ![sequence hopdong](https://github.com/user-attachments/assets/815d8e56-9648-424a-9f67-9c36f2773447)
-# Sequence gan sinh vien
+**Sequence gan sinh vien**
 ![sequence gánv](https://github.com/user-attachments/assets/e612bfaa-0a92-427f-9647-443ee1de42eb)
 
 ## Lưu đồ thuật toán
@@ -84,3 +84,8 @@ Miêu tả công việc:
 
 - Cập nhật thông tin sinh viên, ghi nhận ngày check-in và gán phòng cho sinh viên.
 
+# Yêu cầu 7: 
+Giao diện của Đỗ Minh Nhật:
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
