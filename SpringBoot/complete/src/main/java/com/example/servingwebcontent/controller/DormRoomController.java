@@ -93,19 +93,22 @@ public class DormRoomController {
 
     @PostMapping("/check-room")
     public String checkRoomExist(@RequestParam String roomId, Model model) {
-        boolean exists = false;
         try {
-            exists = dormRoomService.isRoomExist(roomId);
-            if (exists) {
-                model.addAttribute("message", "Phòng " + roomId + " tồn tại trong hệ thống.");
-                model.addAttribute("roomId", roomId);
-            } else {
+            boolean exists = dormRoomService.isRoomExist(roomId);
+            if (!exists) {
                 model.addAttribute("message", "Phòng " + roomId + " không tồn tại!");
+            } else {
+                DormRoom room = dormRoomService.getDormRoomById(roomId).orElse(null);
+                int current = (room != null && room.getCurrentOccupancy() != null) ? room.getCurrentOccupancy() : 0;
+                if (room != null && current >= room.getCapacity()) {
+                    model.addAttribute("message", "Phòng " + roomId + " đã đầy!");
+                } else {
+                    model.addAttribute("message", "Phòng " + roomId + " còn chỗ, bạn có thể thêm hợp đồng cho phòng này.");
+                    model.addAttribute("roomId", roomId);
+                }
             }
         } catch (Exception e) {
             model.addAttribute("message", "Có lỗi xảy ra khi kiểm tra phòng: " + e.getMessage());
-        } finally {
-            
         }
         return "check_room_result";
     }
