@@ -44,12 +44,12 @@ Nội dung 02:
 
 Nội dung 03:
 
-- Thiết kế và trình bày 3 sơ đồ Behavioural Diagram của bài tập lớn:
 
-    + Sequence Diagram mô tả trình tự tương tác khi thêm/sửa/xoá phòng, sinh viên, hoặc khi gán sinh viên vào phòng.
+![sequence them phong](https://github.com/user-attachments/assets/73e63c83-b0f5-406a-8375-1ccb4821c393)
 
-    + Activity Diagram mô tả luồng xử lý nghiệp vụ chính (ví dụ: quy trình thuê phòng, trả phòng).
+![sequence hopdong](https://github.com/user-attachments/assets/815d8e56-9648-424a-9f67-9c36f2773447)
 
+![sequence gánv](https://github.com/user-attachments/assets/e612bfaa-0a92-427f-9647-443ee1de42eb)
 
 ## Lưu đồ thuật toán
 ![luudo](https://github.com/user-attachments/assets/9b82c599-9981-474d-9746-b251ae7a84ca)
