@@ -44,11 +44,11 @@ Nội dung 02:
 
 Nội dung 03:
 
-
+# Sequence them phong
 ![sequence them phong](https://github.com/user-attachments/assets/73e63c83-b0f5-406a-8375-1ccb4821c393)
-
+# Sequence hop dong
 ![sequence hopdong](https://github.com/user-attachments/assets/815d8e56-9648-424a-9f67-9c36f2773447)
-
+# Sequence gan sinh vien
 ![sequence gánv](https://github.com/user-attachments/assets/e612bfaa-0a92-427f-9647-443ee1de42eb)
 
 ## Lưu đồ thuật toán
@@ -66,7 +66,7 @@ Miêu tả công việc:
 - Phương thức này nhận ID phòng và tìm kiếm phòng trong cơ sở dữ liệu.
 
 - Trả về thông báo nếu phòng không tồn tại.
-- 
+
 public boolean isRoomExist(String roomId) {
     return roomRepository.existsById(roomId); // Kiểm tra sự tồn tại của phòng
 }
@@ -83,27 +83,4 @@ Miêu tả công việc:
 - Nếu phòng chưa đầy, tiếp tục đăng ký sinh viên vào phòng.
 
 - Cập nhật thông tin sinh viên, ghi nhận ngày check-in và gán phòng cho sinh viên.
-- 
-public boolean assignStudentToRoom(String studentId, String roomId) {
-    // Kiểm tra phòng có tồn tại
-    if (!roomService.isRoomExist(roomId)) {
-        return false; // Nếu phòng không tồn tại
-    }
 
-    Room room = roomService.findById(roomId).orElseThrow();
-    // Kiểm tra phòng đã đầy chưa
-    int currentOccupancy = studentRepository.countByRoomId(roomId);
-    if (currentOccupancy >= room.getCapacity()) {
-        return false; // Phòng đã đầy
-    }
-
-    // Đăng ký sinh viên vào phòng
-    Student student = studentService.findById(studentId).orElseThrow();
-    student.setRoomId(roomId);
-    student.setCheckedIn(true);
-    student.setCheckInDate(LocalDate.now());
-    student.setCheckOutDate(null); // reset ngày check-out nếu có
-
-    studentRepository.save(student);
-    return true; // Đăng ký thành công
-}
