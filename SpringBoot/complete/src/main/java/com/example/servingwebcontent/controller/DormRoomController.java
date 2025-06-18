@@ -39,9 +39,15 @@ public class DormRoomController {
     }
 
     @PostMapping("/add")
-    public String addDormRoom(@ModelAttribute DormRoom dormRoom) {
-        dormRoomService.saveDormRoom(dormRoom);
-        return "redirect:/dormrooms";
+    public String addDormRoom(@ModelAttribute DormRoom dormRoom, Model model) {
+        try {
+            dormRoomService.saveDormRoom(dormRoom);
+            return "redirect:/dormrooms";
+        } catch (Exception e) {
+            model.addAttribute("dormRoom", dormRoom);
+            model.addAttribute("error", "Có lỗi xảy ra khi lưu phòng: " + e.getMessage());
+            return "dormroom_form";
+        }
     }
 
     @GetMapping("/edit/{id}")
@@ -52,19 +58,31 @@ public class DormRoomController {
     }
 
     @PostMapping("/edit")
-    public String editDormRoom(@ModelAttribute DormRoom dormRoom) {
-        dormRoomService.saveDormRoom(dormRoom);
-        return "redirect:/dormrooms";
+    public String editDormRoom(@ModelAttribute DormRoom dormRoom, Model model) {
+        try {
+            dormRoomService.saveDormRoom(dormRoom);
+            return "redirect:/dormrooms";
+        } catch (Exception e) {
+            model.addAttribute("dormRoom", dormRoom);
+            model.addAttribute("error", "Có lỗi xảy ra khi sửa phòng: " + e.getMessage());
+            return "dormroom_form";
+        }
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteDormRoom(@PathVariable String id) {
-        // Xóa tất cả hợp đồng thuê liên quan trước khi xóa phòng
-        List<RentalContract> contracts = rentalContractService.findByDormRoom_RoomId(id);
-        for (RentalContract contract : contracts) {
-            rentalContractService.deleteContract(contract.getContractId());
+    public String deleteDormRoom(@PathVariable String id, Model model) {
+        try {
+            // Xóa tất cả hợp đồng thuê liên quan trước khi xóa phòng
+            List<RentalContract> contracts = rentalContractService.findByDormRoom_RoomId(id);
+            for (RentalContract contract : contracts) {
+                rentalContractService.deleteContract(contract.getContractId());
+            }
+            dormRoomService.deleteDormRoom(id);
+            return "redirect:/dormrooms";
+        } catch (Exception e) {
+            model.addAttribute("error", "Có lỗi xảy ra khi xóa phòng: " + e.getMessage());
+            model.addAttribute("dormrooms", dormRoomService.getAllDormRooms());
+            return "dormrooms";
         }
-        dormRoomService.deleteDormRoom(id);
-        return "redirect:/dormrooms";
     }
 }
