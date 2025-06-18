@@ -32,14 +32,19 @@ public class RentalContractController {
     }
 
     @GetMapping("/add")
-    public String showAddForm(Model model) {
+    public String showAddForm(@RequestParam(value = "roomId", required = false) String roomId, Model model) {
         List<DormRoom> rooms = dormRoomService.getAllDormRooms();
         Map<String, Integer> roomAvailable = new HashMap<>();
         for (DormRoom r : rooms) {
             int current = r.getCurrentOccupancy() != null ? r.getCurrentOccupancy() : 0;
             roomAvailable.put(r.getRoomId(), r.getCapacity() - current);
         }
-        model.addAttribute("contract", new RentalContract());
+        RentalContract contract = new RentalContract();
+        if (roomId != null) {
+            DormRoom selectedRoom = dormRoomService.getDormRoomById(roomId).orElse(null);
+            contract.setDormRoom(selectedRoom);
+        }
+        model.addAttribute("contract", contract);
         model.addAttribute("students", studentService.getAllStudents());
         model.addAttribute("rooms", rooms);
         model.addAttribute("roomAvailable", roomAvailable);
@@ -52,56 +57,41 @@ public class RentalContractController {
                               @RequestParam String studentId,
                               Model model) {
         try {
+            // Kiểm tra phòng có tồn tại không (Đỗ Minh Nhật)
             DormRoom room = dormRoomService.getDormRoomById(roomId).orElse(null);
+            if (room == null) {
+                setFormModel(model, contract, "Không tìm thấy phòng!", studentId, roomId);
+                return "contract_form";
+            }
+            // Kiểm tra sinh viên có tồn tại không
             Student student = studentService.getStudentById(studentId).orElse(null);
-            List<DormRoom> rooms = dormRoomService.getAllDormRooms();
-            Map<String, Integer> roomAvailable = new HashMap<>();
-            for (DormRoom r : rooms) {
-                int current = r.getCurrentOccupancy() != null ? r.getCurrentOccupancy() : 0;
-                roomAvailable.put(r.getRoomId(), r.getCapacity() - current);
+            if (student == null) {
+                setFormModel(model, contract, "Không tìm thấy sinh viên!", studentId, roomId);
+                return "contract_form";
             }
             // Kiểm tra ngày kết thúc phải >= ngày bắt đầu
             if (contract.getEndDate() != null && contract.getStartDate() != null
                     && contract.getEndDate().isBefore(contract.getStartDate())) {
-                model.addAttribute("error", "Ngày kết thúc phải bằng hoặc sau ngày bắt đầu!");
-                model.addAttribute("contract", contract);
-                model.addAttribute("students", studentService.getAllStudents());
-                model.addAttribute("rooms", rooms);
-                model.addAttribute("roomAvailable", roomAvailable);
+                setFormModel(model, contract, "Ngày kết thúc phải bằng hoặc sau ngày bắt đầu!", studentId, roomId);
                 return "contract_form";
             }
-            if (room == null || student == null) {
-                model.addAttribute("error", "Không tìm thấy sinh viên hoặc phòng!");
-                model.addAttribute("contract", contract);
-                model.addAttribute("students", studentService.getAllStudents());
-                model.addAttribute("rooms", rooms);
-                model.addAttribute("roomAvailable", roomAvailable);
-                return "contract_form";
-            }
+            // Kiểm tra phòng đã đầy chưa (Vũ Huy Kỳ)
             int current = room.getCurrentOccupancy() != null ? room.getCurrentOccupancy() : 0;
             if (current >= room.getCapacity()) {
-                model.addAttribute("error", "Phòng đã đủ người, không thể thêm hợp đồng mới!");
-                model.addAttribute("contract", contract);
-                model.addAttribute("students", studentService.getAllStudents());
-                model.addAttribute("rooms", rooms);
-                model.addAttribute("roomAvailable", roomAvailable);
+                setFormModel(model, contract, "Phòng đã đủ người, không thể thêm hợp đồng mới!", studentId, roomId);
                 return "contract_form";
             }
             // Kiểm tra sinh viên đã có hợp đồng còn hiệu lực chưa
             List<RentalContract> activeContracts = rentalContractService.findByStudent_StudentIDAndStatus(studentId, "Còn hiệu lực");
             if (!activeContracts.isEmpty()) {
-                model.addAttribute("error", "Sinh viên này đang ở phòng khác, không thể thêm hợp đồng mới!");
-                model.addAttribute("contract", contract);
-                model.addAttribute("students", studentService.getAllStudents());
-                model.addAttribute("rooms", rooms);
-                model.addAttribute("roomAvailable", roomAvailable);
+                setFormModel(model, contract, "Sinh viên này đang ở phòng khác, không thể thêm hợp đồng mới!", studentId, roomId);
                 return "contract_form";
             }
             // Đồng bộ dữ liệu
             contract.setDormRoom(room);
             contract.setStudent(student);
 
-            // Cập nhật sinh viên
+            // Cập nhật sinh viên (gán sinh viên vào phòng)
             student.setDormRoomID(room.getRoomId());
             student.setStatus("Đang thuê");
             studentService.saveStudent(student);
@@ -121,19 +111,22 @@ public class RentalContractController {
             rentalContractService.saveContract(contract);
             return "redirect:/contracts";
         } catch (Exception e) {
-            model.addAttribute("error", "Có lỗi xảy ra khi lưu hợp đồng: " + e.getMessage());
-            model.addAttribute("contract", contract);
-            model.addAttribute("students", studentService.getAllStudents());
-            model.addAttribute("rooms", dormRoomService.getAllDormRooms());
-            // Tính lại roomAvailable
-            Map<String, Integer> roomAvailable = new HashMap<>();
-            for (DormRoom r : dormRoomService.getAllDormRooms()) {
-                int current = r.getCurrentOccupancy() != null ? r.getCurrentOccupancy() : 0;
-                roomAvailable.put(r.getRoomId(), r.getCapacity() - current);
-            }
-            model.addAttribute("roomAvailable", roomAvailable);
+            setFormModel(model, contract, "Có lỗi xảy ra khi lưu hợp đồng: " + e.getMessage(), studentId, roomId);
             return "contract_form";
         }
+    }
+
+    private void setFormModel(Model model, RentalContract contract, String error, String studentId, String roomId) {
+        model.addAttribute("error", error);
+        model.addAttribute("contract", contract);
+        model.addAttribute("students", studentService.getAllStudents());
+        model.addAttribute("rooms", dormRoomService.getAllDormRooms());
+        Map<String, Integer> roomAvailable = new HashMap<>();
+        for (DormRoom r : dormRoomService.getAllDormRooms()) {
+            int current = r.getCurrentOccupancy() != null ? r.getCurrentOccupancy() : 0;
+            roomAvailable.put(r.getRoomId(), r.getCapacity() - current);
+        }
+        model.addAttribute("roomAvailable", roomAvailable);
     }
 
     @GetMapping("/edit/{id}")
