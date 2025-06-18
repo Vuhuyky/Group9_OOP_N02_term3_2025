@@ -32,4 +32,14 @@ public class DormRoomService {
     public List<DormRoom> getDormRoomsByStatus(String status) {
         return dormRoomRepository.findByStatus(status);
     }
+
+    public boolean isRoomExist(String roomId) {
+        try {
+            return dormRoomRepository.existsById(roomId);
+        } catch (Exception e) {
+            return false;
+        } finally {
+
+        }
+    }
 }
