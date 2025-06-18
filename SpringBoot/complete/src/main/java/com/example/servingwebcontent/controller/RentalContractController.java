@@ -51,74 +51,89 @@ public class RentalContractController {
                               @RequestParam String roomId,
                               @RequestParam String studentId,
                               Model model) {
-        DormRoom room = dormRoomService.getDormRoomById(roomId).orElse(null);
-        Student student = studentService.getStudentById(studentId).orElse(null);
-        List<DormRoom> rooms = dormRoomService.getAllDormRooms();
-        Map<String, Integer> roomAvailable = new HashMap<>();
-        for (DormRoom r : rooms) {
-            int current = r.getCurrentOccupancy() != null ? r.getCurrentOccupancy() : 0;
-            roomAvailable.put(r.getRoomId(), r.getCapacity() - current);
-        }
-        // Kiểm tra ngày kết thúc phải >= ngày bắt đầu
-        if (contract.getEndDate() != null && contract.getStartDate() != null
-                && contract.getEndDate().isBefore(contract.getStartDate())) {
-            model.addAttribute("error", "Ngày kết thúc phải bằng hoặc sau ngày bắt đầu!");
-            model.addAttribute("contract", contract);
-            model.addAttribute("students", studentService.getAllStudents());
-            model.addAttribute("rooms", rooms);
-            model.addAttribute("roomAvailable", roomAvailable);
-            return "contract_form";
-        }
-        if (room == null || student == null) {
-            model.addAttribute("error", "Không tìm thấy sinh viên hoặc phòng!");
-            model.addAttribute("contract", contract);
-            model.addAttribute("students", studentService.getAllStudents());
-            model.addAttribute("rooms", rooms);
-            model.addAttribute("roomAvailable", roomAvailable);
-            return "contract_form";
-        }
-        int current = room.getCurrentOccupancy() != null ? room.getCurrentOccupancy() : 0;
-        if (current >= room.getCapacity()) {
-            model.addAttribute("error", "Phòng đã đủ người, không thể thêm hợp đồng mới!");
-            model.addAttribute("contract", contract);
-            model.addAttribute("students", studentService.getAllStudents());
-            model.addAttribute("rooms", rooms);
-            model.addAttribute("roomAvailable", roomAvailable);
-            return "contract_form";
-        }
-        // Kiểm tra sinh viên đã có hợp đồng còn hiệu lực chưa
-        List<RentalContract> activeContracts = rentalContractService.findByStudent_StudentIDAndStatus(studentId, "Còn hiệu lực");
-        if (!activeContracts.isEmpty()) {
-            model.addAttribute("error", "Sinh viên này đang ở phòng khác, không thể thêm hợp đồng mới!");
-            model.addAttribute("contract", contract);
-            model.addAttribute("students", studentService.getAllStudents());
-            model.addAttribute("rooms", rooms);
-            model.addAttribute("roomAvailable", roomAvailable);
-            return "contract_form";
-        }
-        // Đồng bộ dữ liệu
-        contract.setDormRoom(room);
-        contract.setStudent(student);
+        try {
+            DormRoom room = dormRoomService.getDormRoomById(roomId).orElse(null);
+            Student student = studentService.getStudentById(studentId).orElse(null);
+            List<DormRoom> rooms = dormRoomService.getAllDormRooms();
+            Map<String, Integer> roomAvailable = new HashMap<>();
+            for (DormRoom r : rooms) {
+                int current = r.getCurrentOccupancy() != null ? r.getCurrentOccupancy() : 0;
+                roomAvailable.put(r.getRoomId(), r.getCapacity() - current);
+            }
+            // Kiểm tra ngày kết thúc phải >= ngày bắt đầu
+            if (contract.getEndDate() != null && contract.getStartDate() != null
+                    && contract.getEndDate().isBefore(contract.getStartDate())) {
+                model.addAttribute("error", "Ngày kết thúc phải bằng hoặc sau ngày bắt đầu!");
+                model.addAttribute("contract", contract);
+                model.addAttribute("students", studentService.getAllStudents());
+                model.addAttribute("rooms", rooms);
+                model.addAttribute("roomAvailable", roomAvailable);
+                return "contract_form";
+            }
+            if (room == null || student == null) {
+                model.addAttribute("error", "Không tìm thấy sinh viên hoặc phòng!");
+                model.addAttribute("contract", contract);
+                model.addAttribute("students", studentService.getAllStudents());
+                model.addAttribute("rooms", rooms);
+                model.addAttribute("roomAvailable", roomAvailable);
+                return "contract_form";
+            }
+            int current = room.getCurrentOccupancy() != null ? room.getCurrentOccupancy() : 0;
+            if (current >= room.getCapacity()) {
+                model.addAttribute("error", "Phòng đã đủ người, không thể thêm hợp đồng mới!");
+                model.addAttribute("contract", contract);
+                model.addAttribute("students", studentService.getAllStudents());
+                model.addAttribute("rooms", rooms);
+                model.addAttribute("roomAvailable", roomAvailable);
+                return "contract_form";
+            }
+            // Kiểm tra sinh viên đã có hợp đồng còn hiệu lực chưa
+            List<RentalContract> activeContracts = rentalContractService.findByStudent_StudentIDAndStatus(studentId, "Còn hiệu lực");
+            if (!activeContracts.isEmpty()) {
+                model.addAttribute("error", "Sinh viên này đang ở phòng khác, không thể thêm hợp đồng mới!");
+                model.addAttribute("contract", contract);
+                model.addAttribute("students", studentService.getAllStudents());
+                model.addAttribute("rooms", rooms);
+                model.addAttribute("roomAvailable", roomAvailable);
+                return "contract_form";
+            }
+            // Đồng bộ dữ liệu
+            contract.setDormRoom(room);
+            contract.setStudent(student);
 
-        // Cập nhật sinh viên
-        student.setDormRoomID(room.getRoomId());
-        student.setStatus("Đang thuê");
-        studentService.saveStudent(student);
+            // Cập nhật sinh viên
+            student.setDormRoomID(room.getRoomId());
+            student.setStatus("Đang thuê");
+            studentService.saveStudent(student);
 
-        // Cập nhật phòng
-        if (room.getCurrentOccupancy() == null) room.setCurrentOccupancy(0);
-        room.setCurrentOccupancy(room.getCurrentOccupancy() + 1);
-        if (room.getCurrentOccupancy() >= room.getCapacity()) {
-            room.setStatus("Đã thuê");
-        } else if (room.getCurrentOccupancy() > 0) {
-            room.setStatus("Đang thuê");
-        } else {
-            room.setStatus("Còn trống");
+            // Cập nhật phòng
+            if (room.getCurrentOccupancy() == null) room.setCurrentOccupancy(0);
+            room.setCurrentOccupancy(room.getCurrentOccupancy() + 1);
+            if (room.getCurrentOccupancy() >= room.getCapacity()) {
+                room.setStatus("Đã thuê");
+            } else if (room.getCurrentOccupancy() > 0) {
+                room.setStatus("Đang thuê");
+            } else {
+                room.setStatus("Còn trống");
+            }
+            dormRoomService.saveDormRoom(room);
+
+            rentalContractService.saveContract(contract);
+            return "redirect:/contracts";
+        } catch (Exception e) {
+            model.addAttribute("error", "Có lỗi xảy ra khi lưu hợp đồng: " + e.getMessage());
+            model.addAttribute("contract", contract);
+            model.addAttribute("students", studentService.getAllStudents());
+            model.addAttribute("rooms", dormRoomService.getAllDormRooms());
+            // Tính lại roomAvailable
+            Map<String, Integer> roomAvailable = new HashMap<>();
+            for (DormRoom r : dormRoomService.getAllDormRooms()) {
+                int current = r.getCurrentOccupancy() != null ? r.getCurrentOccupancy() : 0;
+                roomAvailable.put(r.getRoomId(), r.getCapacity() - current);
+            }
+            model.addAttribute("roomAvailable", roomAvailable);
+            return "contract_form";
         }
-        dormRoomService.saveDormRoom(room);
-
-        rentalContractService.saveContract(contract);
-        return "redirect:/contracts";
     }
 
     @GetMapping("/edit/{id}")
@@ -142,102 +157,123 @@ public class RentalContractController {
                                @RequestParam String roomId,
                                @RequestParam String studentId,
                                Model model) {
-        DormRoom newRoom = dormRoomService.getDormRoomById(roomId).orElse(null);
-        Student student = studentService.getStudentById(studentId).orElse(null);
-        List<DormRoom> rooms = dormRoomService.getAllDormRooms();
-        Map<String, Integer> roomAvailable = new HashMap<>();
-        for (DormRoom r : rooms) {
-            int current = r.getCurrentOccupancy() != null ? r.getCurrentOccupancy() : 0;
-            roomAvailable.put(r.getRoomId(), r.getCapacity() - current);
-        }
-        // Kiểm tra ngày kết thúc phải >= ngày bắt đầu
-        if (contract.getEndDate() != null && contract.getStartDate() != null
-                && contract.getEndDate().isBefore(contract.getStartDate())) {
-            model.addAttribute("error", "Ngày kết thúc phải bằng hoặc sau ngày bắt đầu!");
-            model.addAttribute("contract", contract);
-            model.addAttribute("students", studentService.getAllStudents());
-            model.addAttribute("rooms", rooms);
-            model.addAttribute("roomAvailable", roomAvailable);
-            return "contract_form";
-        }
-        if (newRoom == null || student == null) {
-            model.addAttribute("error", "Không tìm thấy sinh viên hoặc phòng!");
-            model.addAttribute("contract", contract);
-            model.addAttribute("students", studentService.getAllStudents());
-            model.addAttribute("rooms", rooms);
-            model.addAttribute("roomAvailable", roomAvailable);
-            return "contract_form";
-        }
+        try {
+            DormRoom newRoom = dormRoomService.getDormRoomById(roomId).orElse(null);
+            Student student = studentService.getStudentById(studentId).orElse(null);
+            List<DormRoom> rooms = dormRoomService.getAllDormRooms();
+            Map<String, Integer> roomAvailable = new HashMap<>();
+            for (DormRoom r : rooms) {
+                int current = r.getCurrentOccupancy() != null ? r.getCurrentOccupancy() : 0;
+                roomAvailable.put(r.getRoomId(), r.getCapacity() - current);
+            }
+            // Kiểm tra ngày kết thúc phải >= ngày bắt đầu
+            if (contract.getEndDate() != null && contract.getStartDate() != null
+                    && contract.getEndDate().isBefore(contract.getStartDate())) {
+                model.addAttribute("error", "Ngày kết thúc phải bằng hoặc sau ngày bắt đầu!");
+                model.addAttribute("contract", contract);
+                model.addAttribute("students", studentService.getAllStudents());
+                model.addAttribute("rooms", rooms);
+                model.addAttribute("roomAvailable", roomAvailable);
+                return "contract_form";
+            }
+            if (newRoom == null || student == null) {
+                model.addAttribute("error", "Không tìm thấy sinh viên hoặc phòng!");
+                model.addAttribute("contract", contract);
+                model.addAttribute("students", studentService.getAllStudents());
+                model.addAttribute("rooms", rooms);
+                model.addAttribute("roomAvailable", roomAvailable);
+                return "contract_form";
+            }
 
-        // Lấy hợp đồng cũ để kiểm tra phòng cũ
-        RentalContract oldContract = rentalContractService.getContractById(contract.getContractId()).orElse(null);
-        DormRoom oldRoom = oldContract != null ? oldContract.getDormRoom() : null;
+            // Lấy hợp đồng cũ để kiểm tra phòng cũ
+            RentalContract oldContract = rentalContractService.getContractById(contract.getContractId()).orElse(null);
+            DormRoom oldRoom = oldContract != null ? oldContract.getDormRoom() : null;
 
-        // Nếu chuyển phòng, cập nhật occupancy phòng cũ và mới
-        if (oldRoom != null && !oldRoom.getRoomId().equals(newRoom.getRoomId())) {
-            // Giảm số người ở phòng cũ
-            if (oldRoom.getCurrentOccupancy() != null && oldRoom.getCurrentOccupancy() > 0) {
-                oldRoom.setCurrentOccupancy(oldRoom.getCurrentOccupancy() - 1);
-                if (oldRoom.getCurrentOccupancy() >= oldRoom.getCapacity()) {
-                    oldRoom.setStatus("Đã thuê");
-                } else if (oldRoom.getCurrentOccupancy() > 0) {
-                    oldRoom.setStatus("Đang thuê");
-                } else {
-                    oldRoom.setStatus("Còn trống");
+            // Nếu chuyển phòng, cập nhật occupancy phòng cũ và mới
+            if (oldRoom != null && !oldRoom.getRoomId().equals(newRoom.getRoomId())) {
+                // Giảm số người ở phòng cũ
+                if (oldRoom.getCurrentOccupancy() != null && oldRoom.getCurrentOccupancy() > 0) {
+                    oldRoom.setCurrentOccupancy(oldRoom.getCurrentOccupancy() - 1);
+                    if (oldRoom.getCurrentOccupancy() >= oldRoom.getCapacity()) {
+                        oldRoom.setStatus("Đã thuê");
+                    } else if (oldRoom.getCurrentOccupancy() > 0) {
+                        oldRoom.setStatus("Đang thuê");
+                    } else {
+                        oldRoom.setStatus("Còn trống");
+                    }
+                    dormRoomService.saveDormRoom(oldRoom);
                 }
-                dormRoomService.saveDormRoom(oldRoom);
+                // Tăng số người ở phòng mới
+                if (newRoom.getCurrentOccupancy() == null) newRoom.setCurrentOccupancy(0);
+                newRoom.setCurrentOccupancy(newRoom.getCurrentOccupancy() + 1);
+                if (newRoom.getCurrentOccupancy() >= newRoom.getCapacity()) {
+                    newRoom.setStatus("Đã thuê");
+                } else if (newRoom.getCurrentOccupancy() > 0) {
+                    newRoom.setStatus("Đang thuê");
+                } else {
+                    newRoom.setStatus("Còn trống");
+                }
+                dormRoomService.saveDormRoom(newRoom);
             }
-            // Tăng số người ở phòng mới
-            if (newRoom.getCurrentOccupancy() == null) newRoom.setCurrentOccupancy(0);
-            newRoom.setCurrentOccupancy(newRoom.getCurrentOccupancy() + 1);
-            if (newRoom.getCurrentOccupancy() >= newRoom.getCapacity()) {
-                newRoom.setStatus("Đã thuê");
-            } else if (newRoom.getCurrentOccupancy() > 0) {
-                newRoom.setStatus("Đang thuê");
-            } else {
-                newRoom.setStatus("Còn trống");
+
+            // Cập nhật sinh viên
+            student.setDormRoomID(newRoom.getRoomId());
+            student.setStatus("Đang thuê");
+            studentService.saveStudent(student);
+
+            // Cập nhật hợp đồng
+            contract.setDormRoom(newRoom);
+            contract.setStudent(student);
+            rentalContractService.saveContract(contract);
+            return "redirect:/contracts";
+        } catch (Exception e) {
+            model.addAttribute("error", "Có lỗi xảy ra khi sửa hợp đồng: " + e.getMessage());
+            model.addAttribute("contract", contract);
+            model.addAttribute("students", studentService.getAllStudents());
+            model.addAttribute("rooms", dormRoomService.getAllDormRooms());
+            // Tính lại roomAvailable
+            Map<String, Integer> roomAvailable = new HashMap<>();
+            for (DormRoom r : dormRoomService.getAllDormRooms()) {
+                int current = r.getCurrentOccupancy() != null ? r.getCurrentOccupancy() : 0;
+                roomAvailable.put(r.getRoomId(), r.getCapacity() - current);
             }
-            dormRoomService.saveDormRoom(newRoom);
+            model.addAttribute("roomAvailable", roomAvailable);
+            return "contract_form";
         }
-
-        // Cập nhật sinh viên
-        student.setDormRoomID(newRoom.getRoomId());
-        student.setStatus("Đang thuê");
-        studentService.saveStudent(student);
-
-        // Cập nhật hợp đồng
-        contract.setDormRoom(newRoom);
-        contract.setStudent(student);
-        rentalContractService.saveContract(contract);
-        return "redirect:/contracts";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteContract(@PathVariable Integer id) {
-        RentalContract contract = rentalContractService.getContractById(id).orElse(null);
-        if (contract != null) {
-            Student student = contract.getStudent();
-            DormRoom room = contract.getDormRoom();
-            // Cập nhật sinh viên
-            if (student != null) {
-                student.setDormRoomID(null);
-                student.setStatus("Chưa thuê");
-                studentService.saveStudent(student);
-            }
-            // Cập nhật phòng
-            if (room != null && room.getCurrentOccupancy() != null && room.getCurrentOccupancy() > 0) {
-                room.setCurrentOccupancy(room.getCurrentOccupancy() - 1);
-                if (room.getCurrentOccupancy() >= room.getCapacity()) {
-                    room.setStatus("Đã thuê");
-                } else if (room.getCurrentOccupancy() > 0) {
-                    room.setStatus("Đang thuê");
-                } else {
-                    room.setStatus("Còn trống");
+    public String deleteContract(@PathVariable Integer id, Model model) {
+        try {
+            RentalContract contract = rentalContractService.getContractById(id).orElse(null);
+            if (contract != null) {
+                Student student = contract.getStudent();
+                DormRoom room = contract.getDormRoom();
+                // Cập nhật sinh viên
+                if (student != null) {
+                    student.setDormRoomID(null);
+                    student.setStatus("Chưa thuê");
+                    studentService.saveStudent(student);
                 }
-                dormRoomService.saveDormRoom(room);
+                // Cập nhật phòng
+                if (room != null && room.getCurrentOccupancy() != null && room.getCurrentOccupancy() > 0) {
+                    room.setCurrentOccupancy(room.getCurrentOccupancy() - 1);
+                    if (room.getCurrentOccupancy() >= room.getCapacity()) {
+                        room.setStatus("Đã thuê");
+                    } else if (room.getCurrentOccupancy() > 0) {
+                        room.setStatus("Đang thuê");
+                    } else {
+                        room.setStatus("Còn trống");
+                    }
+                    dormRoomService.saveDormRoom(room);
+                }
+                rentalContractService.deleteContract(id);
             }
-            rentalContractService.deleteContract(id);
+            return "redirect:/contracts";
+        } catch (Exception e) {
+            // Nếu có lỗi, quay lại danh sách hợp đồng và báo lỗi
+            model.addAttribute("error", "Có lỗi xảy ra khi xóa hợp đồng: " + e.getMessage());
+            return "contracts";
         }
-        return "redirect:/contracts";
     }
 }

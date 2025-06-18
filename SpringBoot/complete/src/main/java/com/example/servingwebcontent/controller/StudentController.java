@@ -47,9 +47,15 @@ public class StudentController {
     }
 
     @PostMapping("/add")
-    public String addStudent(@ModelAttribute Student student) {
-        studentService.saveStudent(student);
-        return "redirect:/students";
+    public String addStudent(@ModelAttribute Student student, Model model) {
+        try {
+            studentService.saveStudent(student);
+            return "redirect:/students";
+        } catch (Exception e) {
+            model.addAttribute("student", student);
+            model.addAttribute("error", "Có lỗi xảy ra khi lưu sinh viên: " + e.getMessage());
+            return "student_form";
+        }
     }
 
     @GetMapping("/edit/{id}")
@@ -60,19 +66,31 @@ public class StudentController {
     }
 
     @PostMapping("/edit")
-    public String editStudent(@ModelAttribute Student student) {
-        studentService.saveStudent(student);
-        return "redirect:/students";
+    public String editStudent(@ModelAttribute Student student, Model model) {
+        try {
+            studentService.saveStudent(student);
+            return "redirect:/students";
+        } catch (Exception e) {
+            model.addAttribute("student", student);
+            model.addAttribute("error", "Có lỗi xảy ra khi sửa sinh viên: " + e.getMessage());
+            return "student_form";
+        }
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteStudent(@PathVariable String id) {
-        // Xóa tất cả hợp đồng thuê liên quan trước khi xóa sinh viên
-        List<RentalContract> contracts = rentalContractService.findByStudent_StudentID(id);
-        for (RentalContract contract : contracts) {
-            rentalContractService.deleteContract(contract.getContractId());
+    public String deleteStudent(@PathVariable String id, Model model) {
+        try {
+            // Xóa tất cả hợp đồng thuê liên quan trước khi xóa sinh viên
+            List<RentalContract> contracts = rentalContractService.findByStudent_StudentID(id);
+            for (RentalContract contract : contracts) {
+                rentalContractService.deleteContract(contract.getContractId());
+            }
+            studentService.deleteStudent(id);
+            return "redirect:/students";
+        } catch (Exception e) {
+            model.addAttribute("error", "Có lỗi xảy ra khi xóa sinh viên: " + e.getMessage());
+            model.addAttribute("students", studentService.getAllStudents());
+            return "students";
         }
-        studentService.deleteStudent(id);
-        return "redirect:/students";
     }
 }
