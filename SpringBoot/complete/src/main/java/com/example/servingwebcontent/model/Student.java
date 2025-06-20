@@ -6,14 +6,11 @@ import jakarta.persistence.Column;
 import java.time.LocalDate;
 
 @Entity
-public class Student {
+public class Student extends Person {
     @Id
     @Column(name = "student_id")
     private String studentID;
-    private String name;
-    private String phoneNumber;
     private String cccd;
-    private String address;
     private String className;
     private String faculty;
     private String gender;
@@ -21,30 +18,29 @@ public class Student {
     private String dormRoomID; // Chỉ lưu roomId, không phải đối tượng DormRoom
     private String status;
 
-    public Student() {}
+    public Student() {
+        super();
+    }
 
-    public Student(String studentID, String name, String phoneNumber, String dormRoomID) {
+    public Student(String studentID, String name, String phoneNumber, String address, String cccd,
+                   String className, String faculty, String gender, LocalDate dob, String dormRoomID, String status) {
+        super(name, phoneNumber, address);
         this.studentID = studentID;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
+        this.cccd = cccd;
+        this.className = className;
+        this.faculty = faculty;
+        this.gender = gender;
+        this.dob = dob;
         this.dormRoomID = dormRoomID;
+        this.status = status;
     }
 
     // Getter & Setter cho tất cả các trường
     public String getStudentID() { return studentID; }
     public void setStudentID(String studentID) { this.studentID = studentID; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-
     public String getCccd() { return cccd; }
     public void setCccd(String cccd) { this.cccd = cccd; }
-
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
 
     public String getClassName() { return className; }
     public void setClassName(String className) { this.className = className; }
