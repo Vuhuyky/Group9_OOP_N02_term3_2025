@@ -6,6 +6,7 @@ com\example\servingwebcontent\model\Admin.class
 com\example\servingwebcontent\controller\LoginController.class
 com\example\servingwebcontent\repository\AdminRepository.class
 com\example\servingwebcontent\service\DormRoomService.class
+com\example\servingwebcontent\model\Person.class
 com\example\servingwebcontent\controller\DormRoomController.class
 com\example\servingwebcontent\model\Identifiable.class
 com\example\servingwebcontent\service\AdminService.class
