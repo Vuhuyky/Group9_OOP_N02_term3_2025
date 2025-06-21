@@ -38,7 +38,7 @@ Xây dựng ứng dụng quản lý ký túc xá
 - Sinh viên có thể thêm các chức năng vào chương trình để ứng dụng phong phú hơn bằng cách thêm các nghiệp vụ nâng cao cho bài toán quản lý ký túc xá (tùy chọn).
 
 Nội dung 02:
-![z6620007013264_42ec8e3cd07be051214d0d5f5e29bc8b](https://github.com/user-attachments/assets/cdf2f69f-9bc9-4b3a-831d-cf48f73b864e)
+![image](https://github.com/user-attachments/assets/71143f92-4b96-4250-b912-a01a65aeb5b8)
 
 
 
