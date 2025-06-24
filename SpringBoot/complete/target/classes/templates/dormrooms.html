@@ -26,6 +26,7 @@
         </div>
     </form>
     <a th:href="@{/dormrooms/add}" class="btn btn-success mb-3">Thêm phòng mới</a>
+    <a th:href="@{/dormrooms/check-room}" class="btn btn-info mb-3">Kiểm tra phòng</a>
     <div class="table-responsive">
         <table class="table table-bordered table-hover bg-white">
             <thead class="table-dark">
@@ -50,6 +51,7 @@
                     <td th:text="${room.price != null ? #numbers.formatInteger(room.price, 0, 'COMMA') + ' VNĐ' : ''}"></td>
                     <td th:text="${room.status}"></td>
                     <td>
+                        
                         <a th:href="@{'/dormrooms/edit/' + ${room.roomId}}" class="btn btn-sm btn-warning">Sửa</a>
                         <a th:href="@{'/dormrooms/delete/' + ${room.roomId}}" class="btn btn-sm btn-danger"
                            onclick="return confirm('Bạn có chắc muốn xóa phòng này?');">Xóa</a>
