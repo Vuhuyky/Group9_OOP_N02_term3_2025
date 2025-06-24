@@ -7,7 +7,7 @@ https://vuhuyky.github.io/Group9_OOP_N02_term3_2025/
 
 Xây dựng ứng dụng quản lý ký túc xá
 
-****Yêu cầu 2:****
+#### Yêu cầu 2:
 ## 1. Tiêu đề
 **Xây dựng ứng dụng quản lý ký túc xá**
 
@@ -44,7 +44,7 @@ Theo code trong src ở trên
 
 ---
 
-**Yêu cầu 3:**
+#### Yêu cầu 3:
 
 - Giao diện Java Spring Boot 
 
@@ -84,8 +84,6 @@ Nội dung 03:
 **Sequence gan sinh vien**
 ![sequence gánv](https://github.com/user-attachments/assets/e612bfaa-0a92-427f-9647-443ee1de42eb)
 
-## Lưu đồ thuật toán
-![luudo](https://github.com/user-attachments/assets/9b82c599-9981-474d-9746-b251ae7a84ca)
 
 ## Giai đoạn phát triển CRUD Java thuần (trước khi chuyển sang Spring Boot)
 
@@ -103,11 +101,46 @@ Nội dung 03:
 ### 3. Kiểm thử CRUD cho n đối tượng
 
 Nhóm đã kiểm thử các thao tác CRUD cho từng đối tượng bằng các class kiểm thử riêng biệt (ví dụ: StudentTest, DormRoomTest, RentalContractTest) để đảm bảo tính đúng đắn của các thao tác.
-
+![image](https://github.com/user-attachments/assets/b9e53d7d-fbec-4e03-b86c-7cd660f7656e)
+![image](https://github.com/user-attachments/assets/cbbd1796-580a-46c4-8275-71bbe990aee2)
 
 > **Lưu ý:**  
-> Toàn bộ mã nguồn của giai đoạn này được lưu trong folder `src` cũ của repo.  
+> Toàn bộ mã nguồn của giai đoạn này được lưu trong nhánh "Nhat" của repo.  
 > Sau khi hoàn thiện, nhóm đã chuyển sang phát triển ứng dụng web với Spring Boot ở các giai đoạn tiếp theo.
+
+
+#### Yêu cầu 4:
+## 1. Ba phương thức chính
+
+1. Hiển thị danh sách Dorm (read)
+2. Tìm kiếm Room theo tầng hoặc sức chứa
+3. Gán (check-in) Student vào Room
+## Câu 2. Phân công và hiện thực phương thức
+*Đỗ Minh Nhật*
+Phương thức “gán Student vào Room”:
+class CheckInStudent {
+    // studentService đã được khởi tạo ở đâu đó
+ public void assignStudentToRoom(String studentId, String roomId) {
+}
+
+}
+
+*Vũ Huy Kỳ*
+Câu 2.
+
+class ListDorms {
+
+    private DormService dormService; 
+
+    public List<Dorm> getAllDorms() { 
+
+             return dormService.findAll();
+    }
+}
+#### Yêu cầu 5:
+## Lưu đồ thuật toán
+![luudo](https://github.com/user-attachments/assets/9b82c599-9981-474d-9746-b251ae7a84ca)
+
 **Phân chia:**
 *Đỗ Minh Nhật* 
 **Chức năng:** Kiểm tra xem phòng có tồn tại hay không.
@@ -124,8 +157,6 @@ public boolean isRoomExist(String roomId) {
     return roomRepository.existsById(roomId); // Kiểm tra sự tồn tại của phòng
 }
 
-
-
 *Vũ Huy Kỳ*
 **Chức năng:** Kiểm tra phòng có đầy hay không và đăng ký sinh viên vào phòng.
 
@@ -136,8 +167,10 @@ Miêu tả công việc:
 - Nếu phòng chưa đầy, tiếp tục đăng ký sinh viên vào phòng.
 
 - Cập nhật thông tin sinh viên, ghi nhận ngày check-in và gán phòng cho sinh viên.
-
-# Yêu cầu 7: 
+- 
+#### Yêu cầu 6:
+Thêm try catch đã thực hiện trong code
+#### Yêu cầu 7: 
 Giao diện của Đỗ Minh Nhật:
 ![alt text](image.png)
 ![alt text](image-1.png)
