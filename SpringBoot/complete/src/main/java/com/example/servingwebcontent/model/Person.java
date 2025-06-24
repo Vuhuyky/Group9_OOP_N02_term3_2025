@@ -1,10 +1,18 @@
 package com.example.servingwebcontent.model;
 
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
 import java.io.Serializable;
 
+@MappedSuperclass
 public class Person implements Serializable {
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "address")
     private String address;
 
     public Person() {}
