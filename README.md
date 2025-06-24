@@ -2,15 +2,49 @@
 1. Vũ Huy Kỳ 22010414 Github id: Vuhuyky
 2. Đỗ Minh Nhật 22010464 Github id: MinhNhat2710
 
-## Tiêu đề:
-Ứng dụng quản lý ký túc xá
-
 ## Readme Giới thiệu
 https://vuhuyky.github.io/Group9_OOP_N02_term3_2025/
 
 Xây dựng ứng dụng quản lý ký túc xá
 
-**Yêu cầu:**
+**Yêu cầu 2:**
+## 1. Tiêu đề
+**Xây dựng ứng dụng quản lý ký túc xá**
+
+---
+
+## 2. Phân tích đối tượng chính
+- **Sinh viên (Student):**  
+  Quản lý thông tin cá nhân, mã số, lớp, liên hệ, phòng ở.
+- **Phòng ký túc xá (DormRoom):**  
+  Quản lý mã phòng, loại phòng, số lượng tối đa, số lượng hiện tại, trạng thái phòng.
+- **Hợp đồng thuê phòng (RentalContract):**  
+  Quản lý mã hợp đồng, sinh viên thuê, phòng, ngày bắt đầu, ngày kết thúc, trạng thái hợp đồng.
+
+---
+
+## 3. Cấu trúc thư mục project
+Theo code trong src ở trên
+
+---
+
+## 4. Các class chính
+
+- **Student.java**
+- **DormRoom.java**
+- **RentalContract.java**
+
+---
+
+## 5. Các class kiểm định (test)
+
+- **StudentTest.java**
+- **DormRoomTest.java**
+- **RentalContractTest.java**
+
+---
+
+**Yêu cầu 3:**
 
 - Giao diện Java Spring Boot 
 
@@ -38,9 +72,8 @@ Xây dựng ứng dụng quản lý ký túc xá
 - Sinh viên có thể thêm các chức năng vào chương trình để ứng dụng phong phú hơn bằng cách thêm các nghiệp vụ nâng cao cho bài toán quản lý ký túc xá (tùy chọn).
 
 Nội dung 02:
+Sơ đồ Class Diagram
 ![image](https://github.com/user-attachments/assets/71143f92-4b96-4250-b912-a01a65aeb5b8)
-
-
 
 Nội dung 03:
 
@@ -54,7 +87,27 @@ Nội dung 03:
 ## Lưu đồ thuật toán
 ![luudo](https://github.com/user-attachments/assets/9b82c599-9981-474d-9746-b251ae7a84ca)
 
+## Giai đoạn phát triển CRUD Java thuần (trước khi chuyển sang Spring Boot)
 
+### 1. Thực hiện CRUD cho ít nhất 03 đối tượng
+
+Ở phiên bản đầu tiên (Java console), nhóm đã xây dựng chức năng CRUD cho 3 đối tượng chính:
+- Sinh viên (Student)
+- Phòng ký túc xá (DormRoom)
+- Hợp đồng thuê phòng (RentalContract)
+
+### 2. Tái sử dụng code CRUD cho n đối tượng
+
+Để tránh lặp lại code, nhóm đã thiết kế một class CRUD tổng quát sử dụng generic (hoặc interface chung), cho phép thực hiện các thao tác CRUD (thêm, sửa, xóa, tìm kiếm, liệt kê) cho nhiều đối tượng khác nhau chỉ với một lần cài đặt.
+
+### 3. Kiểm thử CRUD cho n đối tượng
+
+Nhóm đã kiểm thử các thao tác CRUD cho từng đối tượng bằng các class kiểm thử riêng biệt (ví dụ: StudentTest, DormRoomTest, RentalContractTest) để đảm bảo tính đúng đắn của các thao tác.
+
+
+> **Lưu ý:**  
+> Toàn bộ mã nguồn của giai đoạn này được lưu trong folder `src` cũ của repo.  
+> Sau khi hoàn thiện, nhóm đã chuyển sang phát triển ứng dụng web với Spring Boot ở các giai đoạn tiếp theo.
 **Phân chia:**
 *Đỗ Minh Nhật* 
 **Chức năng:** Kiểm tra xem phòng có tồn tại hay không.
