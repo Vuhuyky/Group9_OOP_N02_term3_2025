@@ -14,23 +14,32 @@ public class DormRoomService {
     @Autowired
     private DormRoomRepository dormRoomRepository;
 
+    @Autowired
+    private RentalContractService rentalContractService; // Thêm dòng này
+
     public List<DormRoom> getAllDormRooms() {
         try {
-            return dormRoomRepository.findAll();
+            List<DormRoom> rooms = dormRoomRepository.findAll();
+            for (DormRoom room : rooms) {
+                int count = rentalContractService.countActiveContractsByRoom(room.getRoomId());
+                room.setCurrentOccupancy(count);
+            }
+            return rooms;
         } catch (Exception e) {
             return Collections.emptyList();
-        } finally {
-            
         }
     }
 
     public Optional<DormRoom> getDormRoomById(String id) {
         try {
-            return dormRoomRepository.findById(id);
+            Optional<DormRoom> roomOpt = dormRoomRepository.findById(id);
+            roomOpt.ifPresent(room -> {
+                int count = rentalContractService.countActiveContractsByRoom(room.getRoomId());
+                room.setCurrentOccupancy(count);
+            });
+            return roomOpt;
         } catch (Exception e) {
             return Optional.empty();
-        } finally {
-            
         }
     }
 
@@ -38,9 +47,7 @@ public class DormRoomService {
         try {
             dormRoomRepository.save(dormRoom);
         } catch (Exception e) {
-            
-        } finally {
-            
+            // log error nếu cần
         }
     }
 
@@ -48,19 +55,20 @@ public class DormRoomService {
         try {
             dormRoomRepository.deleteById(id);
         } catch (Exception e) {
-            
-        } finally {
-            
+            // log error nếu cần
         }
     }
 
     public List<DormRoom> getDormRoomsByStatus(String status) {
         try {
-            return dormRoomRepository.findByStatus(status);
+            List<DormRoom> rooms = dormRoomRepository.findByStatus(status);
+            for (DormRoom room : rooms) {
+                int count = rentalContractService.countActiveContractsByRoom(room.getRoomId());
+                room.setCurrentOccupancy(count);
+            }
+            return rooms;
         } catch (Exception e) {
             return Collections.emptyList();
-        } finally {
-            
         }
     }
 
@@ -69,8 +77,6 @@ public class DormRoomService {
             return dormRoomRepository.existsById(roomId);
         } catch (Exception e) {
             return false;
-        } finally {
-            
         }
     }
 }
