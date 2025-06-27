@@ -25,18 +25,15 @@
             position: relative;
             z-index: 1;
         }
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #212529;
-            letter-spacing: 1px;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        .card, .table {
+        .card {
             border-radius: 18px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.08);
             border: none;
+        }
+        .table {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
         }
         .table thead {
             background: linear-gradient(90deg, #007bff 60%, #00c6ff 100%);
@@ -52,11 +49,22 @@
         .btn-primary:hover {
             background: linear-gradient(90deg, #0056b3 60%, #00aaff 100%);
         }
-        .btn-success, .btn-info, .btn-warning, .btn-danger {
+        .btn-success {
             font-weight: 600;
         }
-        .form-select, .form-control {
+        .btn-warning, .btn-danger {
+            font-weight: 600;
+        }
+        .filter-form .form-control, .filter-form .form-select {
             border-radius: 8px;
+        }
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #212529;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
         .btn-outline-secondary {
             background: #fff !important;
