@@ -112,31 +112,24 @@ Nhóm đã kiểm thử các thao tác CRUD cho từng đối tượng bằng c�
 #### Yêu cầu 4:
 ## 1. Ba phương thức chính
 
-1. Hiển thị danh sách Dorm (read)
-2. Tìm kiếm Room theo tầng hoặc sức chứa
-3. Gán (check-in) Student vào Room
+1. Hiển thị và lọc danh sách sinh viên
+2. Kiểm tra tình trạng phòng ký túc xá
+3. Thêm mới hợp đồng thuê phòng cho sinh viên
 ## Câu 2. Phân công và hiện thực phương thức
-*Đỗ Minh Nhật*
-Phương thức “gán Student vào Room”:
-class CheckInStudent {
-    // studentService đã được khởi tạo ở đâu đó
- public void assignStudentToRoom(String studentId, String roomId) {
-}
+Thành viên 1: Đỗ Minh Nhật
+Phương thức lựa chọn:
+Hiển thị và lọc danh sách sinh viên
+Mô tả:
+Phương thức này lấy danh sách sinh viên từ hệ thống, cho phép lọc theo lớp, khoa, trạng thái thuê phòng. Kết quả được hiển thị trên giao diện web.
+![Screenshot 2025-06-28 135822](https://github.com/user-attachments/assets/b9671584-9b1f-4385-a37b-e0a47e9bdc51)
+![Screenshot 2025-06-28 135850](https://github.com/user-attachments/assets/4747cd9c-c6c7-485d-b7cc-fa87507b78ef)
 
-}
 
 *Vũ Huy Kỳ*
 Câu 2.
 
-class ListDorms {
+Phương thức này cho phép quản trị viên thêm sinh viên vào phòng
 
-    private DormService dormService; 
-
-    public List<Dorm> getAllDorms() { 
-
-             return dormService.findAll();
-    }
-}
 #### Yêu cầu 5:
 ## Lưu đồ thuật toán
 ![luudo](https://github.com/user-attachments/assets/9b82c599-9981-474d-9746-b251ae7a84ca)
