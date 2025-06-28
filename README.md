@@ -117,16 +117,14 @@ Nhóm đã kiểm thử các thao tác CRUD cho từng đối tượng bằng c�
 3. Thêm mới hợp đồng thuê phòng cho sinh viên
 ## Câu 2. Phân công và hiện thực phương thức
 Thành viên 1: Đỗ Minh Nhật  
-Phương thức lựa chọn:  
-Hiển thị và lọc danh sách sinh viên  
+Phương thức lựa chọn: Hiển thị và lọc danh sách sinh viên  
 Mô tả:  
-Phương thức này lấy danh sách sinh viên từ hệ thống, cho phép lọc theo lớp, khoa, trạng thái thuê phòng. Kết quả được hiển thị trên giao diện web.
+Phương thức này lấy danh sách sinh viên từ hệ thống, cho phép lọc theo lớp, khoa, trạng thái thuê phòng. Kết quả được hiển thị trên giao diện web.  
 ![Screenshot 2025-06-28 135822](https://github.com/user-attachments/assets/b9671584-9b1f-4385-a37b-e0a47e9bdc51)
 ![Screenshot 2025-06-28 135850](https://github.com/user-attachments/assets/4747cd9c-c6c7-485d-b7cc-fa87507b78ef)
 
 Thành viên 2: Vũ Huy Kỳ  
-Phương thức lựa chọn:  
-Thêm mới hợp đồng thuê phòng cho sinh viên  
+Phương thức lựa chọn: Thêm mới hợp đồng thuê phòng cho sinh viên  
 Mô tả:  
 Phương thức này cho phép quản trị viên thêm sinh viên vào phòng  
 ![Screenshot 2025-06-28 140837](https://github.com/user-attachments/assets/b23aa6a4-7f60-4662-b03a-c5587d8a3fb9)  
@@ -151,7 +149,7 @@ Phân tích chức năng thành các bước nhỏ:
 Phân chia chức năng nhỏ cho các thành viên:  
 - Đỗ Minh Nhật: Xây dựng chức năng lọc sinh viên chưa thuê phòng.  
 - Vũ Huy Kỳ: Xây dựng chức năng kiểm tra phòng còn chỗ trống và tạo hợp đồng thuê phòng mới.  
-- Cả nhóm: Gọi các chức năng con tạo thành chức năng chính.
+- Cả nhóm: Gọi các chức năng con tạo thành chức năng chính.  
 
 
 Câu 2: Mỗi thành viên thực hiện 1 phương thức nhỏ  
