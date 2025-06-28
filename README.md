@@ -116,19 +116,22 @@ Nhóm đã kiểm thử các thao tác CRUD cho từng đối tượng bằng c�
 2. Kiểm tra tình trạng phòng ký túc xá
 3. Thêm mới hợp đồng thuê phòng cho sinh viên
 ## Câu 2. Phân công và hiện thực phương thức
-Thành viên 1: Đỗ Minh Nhật
-Phương thức lựa chọn:
-Hiển thị và lọc danh sách sinh viên
-Mô tả:
+Thành viên 1: Đỗ Minh Nhật  
+Phương thức lựa chọn:  
+Hiển thị và lọc danh sách sinh viên  
+Mô tả:  
 Phương thức này lấy danh sách sinh viên từ hệ thống, cho phép lọc theo lớp, khoa, trạng thái thuê phòng. Kết quả được hiển thị trên giao diện web.
 ![Screenshot 2025-06-28 135822](https://github.com/user-attachments/assets/b9671584-9b1f-4385-a37b-e0a47e9bdc51)
 ![Screenshot 2025-06-28 135850](https://github.com/user-attachments/assets/4747cd9c-c6c7-485d-b7cc-fa87507b78ef)
 
+Thành viên 2: Vũ Huy Kỳ  
+Phương thức lựa chọn:  
+Thêm mới hợp đồng thuê phòng cho sinh viên  
+Mô tả:  
+Phương thức này cho phép quản trị viên thêm sinh viên vào phòng  
+![Screenshot 2025-06-28 140837](https://github.com/user-attachments/assets/b23aa6a4-7f60-4662-b03a-c5587d8a3fb9)  
+![Screenshot 2025-06-28 140927](https://github.com/user-attachments/assets/9b53e1ca-937a-4ff1-bfb3-53112fd9b566)  
 
-*Vũ Huy Kỳ*
-Câu 2.
-
-Phương thức này cho phép quản trị viên thêm sinh viên vào phòng
 
 #### Yêu cầu 5:
 ## Lưu đồ thuật toán
