@@ -153,11 +153,13 @@ Phân chia chức năng nhỏ cho các thành viên:
 
 
 Câu 2: Mỗi thành viên thực hiện 1 phương thức nhỏ  
-1. Đỗ Minh Nhật
-Miêu tả phương thức: Hiển thị danh sách sinh viên chưa có hợp đồng thuê phòng còn hiệu lực (trạng thái "Chưa thuê"). Chức năng này nằm trong StudentController, sử dụng bộ lọc trạng thái.  
+1. Đỗ Minh Nhật:  Lọc danh sách sinh viên chưa thuê phòng  
+Miêu tả phương thức: Hiển thị danh sách sinh viên chưa có hợp đồng thuê phòng còn hiệu lực (trạng thái "Chưa thuê"). Chức năng này nằm trong StudentController, sử dụng bộ lọc trạng thái.
+
  ![image](https://github.com/user-attachments/assets/2cf7d89b-6c98-49a7-932a-51ff8e8acbba)  
-3. Vũ Huy Kỳ: Kiểm tra phòng còn chỗ trống và tạo hợp đồng thuê phòng mới
-Miêu tả phương thức: Khi thêm hợp đồng thuê phòng, kiểm tra phòng còn chỗ trống, sau đó tạo hợp đồng thêm sinh viên và cập nhật trạng thái phòng, sinh viên.
+3. Vũ Huy Kỳ: Kiểm tra phòng còn chỗ trống và tạo hợp đồng thuê phòng mới  
+Miêu tả phương thức: Khi thêm hợp đồng thuê phòng, kiểm tra phòng còn chỗ trống, sau đó tạo hợp đồng thêm sinh viên và cập nhật trạng thái phòng, sinh viên.  
+
 ![image](https://github.com/user-attachments/assets/ec73b431-6a59-4dbb-a247-a85704b0f256)  
 ![image](https://github.com/user-attachments/assets/346df60c-db81-4339-9a8b-aca60020fe98)  
 
