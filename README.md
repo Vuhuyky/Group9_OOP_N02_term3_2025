@@ -167,3 +167,11 @@ Miêu tả phương thức: Khi thêm hợp đồng thuê phòng, kiểm tra ph�
 Thêm try catch đã thực hiện trong code
 #### Yêu cầu 7: 
 Sau khi update giao diện đã được thực hiện ở ngay yêu cầu 5
+
+
+Cập nhật thêm 28/6/2025
+Giao diện chính của nhóm:  
+![image](https://github.com/user-attachments/assets/bfcff7fb-f160-466c-81f8-88ff690eb858)
+
+
+
