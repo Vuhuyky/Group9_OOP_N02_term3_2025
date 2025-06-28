@@ -166,12 +166,4 @@ Miêu tả phương thức: Khi thêm hợp đồng thuê phòng, kiểm tra ph�
 #### Yêu cầu 6:
 Thêm try catch đã thực hiện trong code
 #### Yêu cầu 7: 
-Giao diện của Đỗ Minh Nhật:
-![alt text](image.png)
-![alt text](image-1.png)
-![alt text](image-2.png)
-Giao diện của Vũ Huy Kỳ:
-![alt text](image-3.png)
-![alt text](image-4.png)
-![alt text](image-5.png)
-![alt text](image-6.png)
+Sau khi update giao diện đã được thực hiện ở ngay yêu cầu 55
