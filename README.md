@@ -135,35 +135,100 @@ Phương thức này cho phép quản trị viên thêm sinh viên vào phòng
 
 #### Yêu cầu 5:
 ## Lưu đồ thuật toán
-![luudo](https://github.com/user-attachments/assets/9b82c599-9981-474d-9746-b251ae7a84ca)
+![image](https://github.com/user-attachments/assets/5b72f3c3-d2f1-47b0-997e-f9ac496ccb22)
 
-**Phân chia:**
-*Đỗ Minh Nhật* 
-**Chức năng:** Kiểm tra xem phòng có tồn tại hay không.
+Câu 1: Chức năng chính của nhóm  
+Chức năng chính:  
+Quản lý hợp đồng thuê phòng ký túc xá cho sinh viên  
 
-Miêu tả công việc:
+Phân tích chức năng thành các bước nhỏ:  
+Lọc danh sách sinh viên chưa thuê phòng  
+Hiển thị danh sách sinh viên có trạng thái "Chưa thuê" trên giao diện quản lý sinh viên.  
+Chọn phòng trong quản lý phòng, kiểm tra phòng còn chỗ trống  
+Tạo hợp đồng thuê phòng mới cho sinh viên  
+Chọn sinh viên chưa thuê, chọn phòng còn chỗ, tạo hợp đồng và cập nhật trạng thái phòng, sinh viên.  
 
-- Viết phương thức để kiểm tra sự tồn tại của phòng trong cơ sở dữ liệu.
+Phân chia chức năng nhỏ cho các thành viên:  
+- Đỗ Minh Nhật: Xây dựng chức năng lọc sinh viên chưa thuê phòng.  
+- Vũ Huy Kỳ: Xây dựng chức năng kiểm tra phòng còn chỗ trống và tạo hợp đồng thuê phòng mới.  
+- Cả nhóm: Gọi các chức năng con tạo thành chức năng chính.
 
-- Phương thức này nhận ID phòng và tìm kiếm phòng trong cơ sở dữ liệu.
 
-- Trả về thông báo nếu phòng không tồn tại.
-
-public boolean isRoomExist(String roomId) {
-    return roomRepository.existsById(roomId); // Kiểm tra sự tồn tại của phòng
+Câu 2: Mỗi thành viên thực hiện 1 phương thức nhỏ  
+1. Đỗ Minh Nhật
+Miêu tả phương thức: Hiển thị danh sách sinh viên chưa có hợp đồng thuê phòng còn hiệu lực (trạng thái "Chưa thuê"). Chức năng này nằm trong StudentController, sử dụng bộ lọc trạng thái.  
+ 
+@GetMapping
+public String listStudents(
+        @RequestParam(required = false) String className,
+        @RequestParam(required = false) String faculty,
+        @RequestParam(required = false) String status,
+        Model model) {
+    List<Student> students = studentService.getAllStudents().stream()
+            .filter(s -> className == null || className.isEmpty() || (s.getClassName() != null && s.getClassName().toLowerCase().contains(className.toLowerCase())))
+            .filter(s -> faculty == null || faculty.isEmpty() || (s.getFaculty() != null && s.getFaculty().toLowerCase().contains(faculty.toLowerCase())))
+            .filter(s -> status == null || status.isEmpty() || (s.getStatus() != null && s.getStatus().equalsIgnoreCase(status)))
+            .collect(Collectors.toList());
+    model.addAttribute("students", students);
+    model.addAttribute("className", className);
+    model.addAttribute("faculty", faculty);
+    model.addAttribute("status", status);
+    return "students";
 }
 
-*Vũ Huy Kỳ*
-**Chức năng:** Kiểm tra phòng có đầy hay không và đăng ký sinh viên vào phòng.
+2. Vũ Huy Kỳ: Kiểm tra phòng còn chỗ trống và tạo hợp đồng thuê phòng mới
+Miêu tả phương thức: Khi thêm hợp đồng thuê phòng, kiểm tra phòng còn chỗ trống, sau đó tạo hợp đồng thêm sinh viên và cập nhật trạng thái phòng, sinh viên.
 
-Miêu tả công việc:
+@PostMapping("/add")
+public String addContract(@ModelAttribute RentalContract contract,
+                          @RequestParam String roomId,
+                          @RequestParam String studentId,
+                          Model model) {
+    try {
+        DormRoom room = dormRoomService.getDormRoomById(roomId).orElse(null);
+        Student student = studentService.getStudentById(studentId).orElse(null);
 
-- Viết phương thức để kiểm tra phòng có đầy hay không (dựa vào số lượng sinh viên đã đăng ký trong phòng).
+        int current = room.getCurrentOccupancy() != null ? room.getCurrentOccupancy() : 0;
+        if (current >= room.getCapacity()) {
+            setFormModel(model, contract, "Phòng đã đủ người, không thể thêm hợp đồng mới!", studentId, roomId);
+            return "contract_form";
+        }
+        // Kiểm tra sinh viên đã có hợp đồng còn hiệu lực chưa
+        List<RentalContract> activeContracts = rentalContractService.findByStudent_StudentIDAndStatus(studentId, "Còn hiệu lực");
+        if (!activeContracts.isEmpty()) {
+            setFormModel(model, contract, "Sinh viên này đã có hợp đồng còn hiệu lực!", studentId, roomId);
+            return "contract_form";
+        }
+        // Đồng bộ dữ liệu
+        contract.setDormRoom(room);
+        contract.setStudent(student);
 
-- Nếu phòng chưa đầy, tiếp tục đăng ký sinh viên vào phòng.
+        // Cập nhật sinh viên (gán sinh viên vào phòng)
+        student.setDormRoomID(room.getRoomId());
+        student.setStatus("Đang thuê");
+        studentService.saveStudent(student);
 
-- Cập nhật thông tin sinh viên, ghi nhận ngày check-in và gán phòng cho sinh viên.
-- 
+        // Cập nhật phòng
+        room.setCurrentOccupancy(current + 1);
+        if (room.getCurrentOccupancy() >= room.getCapacity()) {
+            room.setStatus("Đã thuê");
+        } else if (room.getCurrentOccupancy() > 0) {
+            room.setStatus("Đang thuê");
+        } else {
+            room.setStatus("Còn trống");
+        }
+        dormRoomService.saveDormRoom(room);
+
+        rentalContractService.saveContract(contract);
+        return "redirect:/contracts";
+    } catch (Exception e) {
+        setFormModel(model, contract, "Có lỗi xảy ra khi lưu hợp đồng: " + e.getMessage(), studentId, roomId);
+        return "contract_form";
+    }
+}
+
+
+
 #### Yêu cầu 6:
 Thêm try catch đã thực hiện trong code
 #### Yêu cầu 7: 
