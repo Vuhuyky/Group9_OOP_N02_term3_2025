@@ -33,6 +33,7 @@ public class StudentController {
                 .filter(s -> status == null || status.isEmpty() || (s.getStatus() != null && s.getStatus().equalsIgnoreCase(status)))
                 .collect(Collectors.toList());
         model.addAttribute("students", students);
+        System.out.println("get params: " +className);
         // Giữ lại giá trị lọc trên form
         model.addAttribute("className", className);
         model.addAttribute("faculty", faculty);
