@@ -48,12 +48,12 @@ Theo code trong src ở trên
 
 - Giao diện Java Spring Boot 
 
-1. **Có chức năng qquản lý phòng ký túc xá**
+1. **Có chức năng quản lý phòng ký túc xá**
    - Thêm, sửa, xoá phòng.
    - Liệt kê thông tin phòng.
    - Lọc phòng còn trống hoặc đã thuê.
 
-2. **Có chức năng qquản lý sinh viên**
+2. **Có chức năng quản lý sinh viên**
    - Thêm, sửa, xoá thông tin sinh viên.
    - Liệt kê sinh viên.
    - Lọc sinh viên theo lớp, khoa, trạng thái thuê phòng.
@@ -89,7 +89,7 @@ Nội dung 03:
 
 ### 1. Thực hiện CRUD cho ít nhất 03 đối tượng
 
-Ở phiên bản đầu tiên (Java console), nhóm đã xây dựng chức năng CRUD cho 3 đối tượng chính:
+Ở giai đoạn đầu tiên, nhóm đã xây dựng chức năng CRUD cho 3 đối tượng chính:
 - Sinh viên (Student)
 - Phòng ký túc xá (DormRoom)
 - Hợp đồng thuê phòng (RentalContract)
